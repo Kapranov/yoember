@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+HOSTNAME='api.dev.local'
+
 clear
 
 progress-bar() {
@@ -27,4 +29,4 @@ until ./lib/bar; rake clear:clear; do
 done
 
 echo -en "\n\n\tStart localhost Server\n\n"
-bundle exec rails s -b api.dev.local
+bundle exec rails s -b $HOSTNAME
