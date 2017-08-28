@@ -304,6 +304,7 @@ DEPENDENCIES
   bcrypt
   brakeman
   byebug
+  capybara
   cucumber-api
   cucumber-api-steps
   cucumber-rails
