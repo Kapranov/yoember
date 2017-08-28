@@ -30,13 +30,7 @@ ruby_drop:
 processes:
 	$(V)ps aux | grep 'ruby' | awk '{print $2}' | xargs kill -9
 
-nginx: ruby_drop
-	$(V)if [ "$(RUBYSERVICE)" ]; then killall ruby && echo "Running Ruby Service Killed"; else echo "No Running Ruby Service!"; fi
-	$(V)if [ "$(NGINXSERVICE)" ]; then service nginx stop && echo "Running Nginx Service Killed"; else echo "No Running Nginx Service!"; fi
-	$(V)if [ "$(UNICORNSERVICE)" ]; then ps aux | grep 'unicorn' | awk '{print $2}' | xargs kill -9 && echo "Running Unicorn Service Killed"; else echo "No Running Unicorn Service!"; fi
-
 bundle:
-	$(V)bundle clean --force
 	$(V)rm -f Gemfile.lock
 	$(V)bundle
 
@@ -46,16 +40,15 @@ clean: bundle
 	$(V)bundle exec rake log:clear
 
 redis_browser_up: redis_browser_down
-	$(V)redis-browser --url redis://127.0.0.1:6379 -n 1
-	#$(V)redis-browser --config config/redis_browser.yml
+	$(V)redis-browser --url redis://127.0.0.1:4567 -n 0
 
 redis_browser_down:
 	$(V)if [ "$(REDISBROWSERSERVICE)" ]; then killall redis_browser && echo "Running Redis Browser Killed"; else echo "No Running Redis Browser!"; fi
 
-db_up:
+redis_up:
 	$(V)sudo service redis_6379 start
 
-db_down:
+redis_down:
 	$(V)sudo service redis_6379 stop
 
 db_drop:
@@ -79,6 +72,6 @@ server:
 test: clean
 	$(V)rake test
 
-start: down nginx clean brakeman
+start: down clean brakeman
 	$(V)echo "\n\n\t  Start App $(DEVELOPMENT) Enviroment\n\n\t     $(LOCALSERVER)\n\n"
 	$(V)bundle exec rails s -b api.dev.local
