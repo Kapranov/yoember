@@ -95,6 +95,7 @@ GEM
       nokogiri (~> 1.5)
       railties (>= 4, < 5.2)
     cucumber-wire (0.0.1)
+    database_cleaner (1.6.1)
     debug_inspector (0.0.3)
     diff-lcs (1.3)
     domain_name (0.5.20170404)
@@ -133,6 +134,11 @@ GEM
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
       ruby_dep (~> 1.2)
+    lograge (0.6.0)
+      actionpack (>= 4, < 5.2)
+      activesupport (>= 4, < 5.2)
+      railties (>= 4, < 5.2)
+      request_store (~> 1.0)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.6)
@@ -229,6 +235,7 @@ GEM
       redis-store (>= 1.2, < 2)
     redis-store (1.3.0)
       redis (>= 2.2)
+    request_store (1.3.2)
     rest-client (1.8.0)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
@@ -300,6 +307,7 @@ DEPENDENCIES
   cucumber-api
   cucumber-api-steps
   cucumber-rails
+  database_cleaner
   em-synchrony
   factory_girl_rails
   faker
@@ -308,6 +316,7 @@ DEPENDENCIES
   hirb-unicode
   hiredis
   listen (~> 3.1)
+  lograge
   minitest-reporters
   oj
   oj_mimic_json
