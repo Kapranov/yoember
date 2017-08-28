@@ -1,11 +1,11 @@
-rails_version = ENV["RAILS_VERSION"] || "default"
+version = ENV["VERSION"] || "default"
 
-case rails_version
+case version
 when "default"
   "~> 5.1"
 else
-  "~> #{rails_version}"
+  "~> #{version}"
 end
 
-version = ENV["RAILS_VERSION"] || '5.1'
+version = ENV["VERSION"] || '5.1'
 eval_gemfile File.expand_path("../gemfiles/#{version}.gemfile", __FILE__)
