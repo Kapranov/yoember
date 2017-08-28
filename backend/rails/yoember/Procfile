@@ -1,2 +1,2 @@
 web: bundle exec rackup config.ru -p 3000
-console: rails c
+con: rails c
