@@ -51,6 +51,12 @@ redis_up:
 redis_down:
 	$(V)sudo service redis_6379 stop
 
+db_create:
+	$(V)rake db:create
+
+db_migrate:
+	$(V)rake db:migrate
+
 db_drop:
 	$(V)rake db:drop
 
@@ -62,6 +68,8 @@ db_seed:
 
 db_reload:
 	$(V)rake db:reload
+
+db_setup: clean db_drop db_create db_migrate db_seed
 
 brakeman:
 	$(V)brakeman -d
