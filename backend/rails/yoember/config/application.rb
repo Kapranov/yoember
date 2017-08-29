@@ -29,6 +29,10 @@ module Yoember
     config.lograge.custom_options = lambda do |event|
       {:time => event.time, :search_engine => event.payload[:search_engine], :user_agent => event.payload[:user_agent]}
     end
+
+    config.middleware.delete Rack::Sendfile
+    config.middleware.delete Rack::Runtime
+
     config.generators do |g|
       g.factory_girl true
       # For Minitest

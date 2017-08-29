@@ -11,41 +11,45 @@ rails g controller Errors
 rake test
 bundle exec rspec
 bundel exec cucumber
+```
+> Test it out
 
-curl -I -v http://api.dev.local:3000
-curl -I --trace-ascii - http://api.dev.local:3000
+```
+$ curl -I -v http://api.dev.local:3000
+$ curl -I --trace-ascii - http://api.dev.local:3000
 
-curl http://api.dev.local:3000 | jq '.'
-curl http://api.dev.local:3000 | python -m json.tool
+$ curl http://api.dev.local:3000 | jq '.'
+$ curl http://api.dev.local:3000 | python -m json.tool
 
-curl http://api.dev.local:3000
-curl http://api.dev.local:3000/invitations
-curl http://api.dev.local:3000/invitations/1
-curl http://api.dev.local:3000/invitations/2
-curl http://api.dev.local:3000/invitations/3
+$ curl http://api.dev.local:3000
+$ curl http://api.dev.local:3000/invitations
+$ curl http://api.dev.local:3000/invitations/1
+$ curl http://api.dev.local:3000/invitations/2
+$ curl http://api.dev.local:3000/invitations/3
 
 # create new item
-curl -i -H "Accept: application/vnd.api+json" \
+$ curl -i -H "Accept: application/vnd.api+json" \
         -H 'Content-Type:application/vnd.api+json' \
         -X POST \
         -d '{"data": {"type":"invitations", "attributes":{"email": "test@example.com"}}}' \
         http://localhost:3000/invitations
 
 # update has been created item
-curl -i -H "Accept: application/vnd.api+json" \
+$ curl -i -H "Accept: application/vnd.api+json" \
         -H 'Content-Type:application/vnd.api+json' \
         -X PUT \
         -d '{"email": "oleg@example.com"}' \
         http://localhost:3000/invitations/4
 
 # destroy item
-curl -i -H "Accept: application/vnd.api+json" \
+$ curl -i -H "Accept: application/vnd.api+json" \
         -H 'Content-Type:application/vnd.api+json' \
         -X DELETE \
         http://localhost:3000/invitations/4
+```
+> Modern command line HTTP client – httpie
 
-
-# Modern command line HTTP client – httpie
+```
 http :3000
 
 # GET /invitations
