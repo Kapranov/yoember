@@ -32,7 +32,7 @@ module Yoember
     config.generators do |g|
       g.factory_girl true
       # For Minitest
-      # g.test_framework :minitest, spec: false, fixture: false
+      # g.test_framework :minitest, spec: false, fixture: true
       # g.test_framework :minitest, spec: true
       # For RSpec
       g.test_framework :rspec,

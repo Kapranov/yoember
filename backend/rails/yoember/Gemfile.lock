@@ -148,7 +148,21 @@ GEM
     mini_mime (0.1.4)
     mini_portile2 (2.2.0)
     minitest (5.10.3)
-    minitest-reporters (1.1.16)
+    minitest-capybara (0.8.2)
+      capybara (~> 2.2)
+      minitest (~> 5.0)
+      rake
+    minitest-metadata (0.6.0)
+      minitest (>= 4.7, < 6.0)
+    minitest-rails (3.0.0)
+      minitest (~> 5.8)
+      railties (~> 5.0)
+    minitest-rails-capybara (3.0.1)
+      capybara (~> 2.7)
+      minitest-capybara (~> 0.8)
+      minitest-metadata (~> 0.6)
+      minitest-rails (~> 3.0)
+    minitest-reporters (1.1.17)
       ansi
       builder
       minitest (>= 5.0)
@@ -318,6 +332,7 @@ DEPENDENCIES
   hiredis
   listen (~> 3.1)
   lograge
+  minitest-rails-capybara
   minitest-reporters
   oj
   oj_mimic_json

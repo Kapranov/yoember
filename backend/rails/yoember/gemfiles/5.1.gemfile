@@ -52,11 +52,12 @@ end
 
 group :test do
   gem 'rails-controller-testing'
-  gem 'minitest-reporters'
   gem 'shoulda-matchers',         require: false
   gem 'shoulda-context',          require: false
   gem 'cucumber-rails',           require: false
   gem 'cucumber-api',             require: false
   gem 'cucumber-api-steps',       require: false
   gem 'database_cleaner'
+  gem 'minitest-reporters'
+  gem 'minitest-rails-capybara'
 end
