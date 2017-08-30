@@ -86,9 +86,9 @@ Which one should you use? The answer is, choose the one that fits your
 API data format, or is as close to it as possible. But what format do
 each of these serializers expect? Let’s find out.
 
-*JSONSerializer*
+**JSONSerializer**
 
-JSONSerializer, not to be confused with JSONAPISerializer, is a
+*JSONSerializer*, not to be confused with *JSONAPISerializer*, is a
 serializer that can be used for APIs that simply send the data back and
 forth without extra meta information. For example, let’s say I make a
 request to `/api/users/8`. The expected JSON response is:
@@ -98,7 +98,7 @@ request to `/api/users/8`. The expected JSON response is:
 ```
 
 The response is very flat and only contains the data. The data isn’t
-nested under any keys like data as you often find with other APIs and
+nested under any keys like `data` as you often find with other APIs and
 there is no metadata. Similarly, if you are creating, updating, and
 deleting records, respond with the record that was created, modified, or
 deleted: `{ "id": 99, "first": "David", "last": "Tang" }`.
@@ -142,11 +142,12 @@ each individual pet and company respectively. Ember Data will
 asynchronously load these related models when you need them, such as
 asking for them in your template.
 
-*RESTSerializer*
+**RESTSerializer**
 
-The RESTSerializer differs from the JSONSerializer in that it introduces
-an extra key in the response that matches the model name. For example,
-if a request is made to `/api/users/8`, the expected JSON response is:
+The *RESTSerializer* differs from the *JSONSerializer* in that it
+introduces an extra key in the response that matches the model name.
+For example, if a request is made to `/api/users/8`, the expected JSON
+response is:
 
 ```
 {
@@ -189,9 +190,9 @@ an array is being returned. It can also be in the singular form. Both
 work, but I tend to use the model name in its plural form for array
 responses and in its singular form for single object responses.
 
-In the previous `users` example using the **JSONSerializer**, `pets` and
+In the previous `users` example using the *JSONSerializer*, `pets` and
 `company` were asynchronously loaded from the server. One of the
-benefits of using the **RESTSerializer**  is that it supports
+benefits of using the *RESTSerializer*  is that it supports
 sideloading of data, which allows us to embed related records in the
 response of the primary data requested. For example, when a request is
 made to `/api/users/8`, a response with sideloaded data would look like:
@@ -216,7 +217,7 @@ made to `/api/users/8`, a response with sideloaded data would look like:
 ```
 
 The response has keys `pets` and `companies` that correspond to the
-sideloaded data. This was not possible with the **JSONSerializer**.
+sideloaded data. This was not possible with the *JSONSerializer*.
 Using sideloaded data also enables you to make your model relationships
 synchronous:
 
@@ -230,7 +231,9 @@ export default DS.Model.extend({
 ```
 
 If you wanted your relationships to be synchronous with the
-**JSONSerializer**, you would need to make sure that all companies and
-pets were in the store prior to requesting the user.
+*JSONSerializer*, you would need to make sure that all companies
+and pets were in the store prior to requesting the user.
+
+**JSONAPISerializer**
 
 ### August 2017 Oleg G.Kapranov
