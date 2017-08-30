@@ -398,9 +398,11 @@ determine which one fits your project’s needs.
 
 Interested in learning more about Ember Data and how to use it with any
 API? Check out the book [Ember Data in the Wild - Getting Ember Data to
-Work With Your API][2].
+Work With Your API][2] and [source code][3] from book.
 
 ### August 2017 Oleg G.Kapranov
 
 [1]: http://jsonapi.org/
 [2]: https://leanpub.com/emberdatainthewild
+[3]: https://github.com/skaterdav85/ember-data-in-the-wild
+[4]: http://thejsguy.com/
