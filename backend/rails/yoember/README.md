@@ -236,4 +236,171 @@ and pets were in the store prior to requesting the user.
 
 **JSONAPISerializer**
 
+*JSONAPISerializer* is the last serializer and it expects data to adhere
+to the [JSON API specification][1]. For an endpoint that returns a
+single object, like `/api/users/8`, a JSON API compliant response would
+be:
+
+```
+{
+  "data": {
+    "type": "users",
+    "id": "8",
+    "attributes": {
+      "first": "David",
+      "last": "Tang"
+    }
+  }
+}
+```
+
+The `attributes` property contains the data, the `type` property
+contains the plural form of the model name, and the `id` property
+contain the model’s id. One thing to note is that attributes need
+to be dash-cased. If our attribute was `firstName` instead of `first`,
+the attribute key name would need to be `first-name`.
+
+For an endpoint that returns an array of objects, such as `/api/users`,
+a JSON API compliant response would be:
+
+```
+{
+  "data": [
+    {
+      "type": "users",
+      "id": "8",
+      "attributes": {
+        "first": "David",
+        "last": "Tang"
+      }
+    },
+    {
+      "type": "users",
+      "id": "9",
+      "attributes": {
+        "first": "Jane",
+        "last": "Doe"
+      }
+    }
+  ]
+}
+```
+
+Again, there is a `data` key but this time it contains an array. Each
+element in the array matches the same structure as when fetching a
+single resource. That is, an object with keys `type`, `id`, and
+`attributes`.
+
+What about relationships? To handle the `hasMany` pet relationship when
+a user is requested, this is the expected JSON API structure:
+
+```
+{
+  "data": {
+    "type": "users",
+    "id": "8",
+    "attributes": {
+      "first": "David",
+      "last": "Tang"
+    },
+    "relationships": {
+      "pets": {
+        "data": [
+          { "id": 1, "type": "pets" },
+          { "id": 3, "type": "pets" }
+        ]
+      }
+    }
+  }
+}
+```
+
+As you can see, there is a `relationships` object in the primary
+`data` object. This example just shows the `pets` relationship but
+you can have as many as you need in the `relationships` object. If
+you look carefully at `data.relationships.pets.data`, each element
+in the array is not the `pet` definition. It simply contains the
+`id` and the `type`.
+
+Lastly, what about sideloading data?
+
+```
+{
+  "data": {
+    "type": "users",
+    "id": "8",
+    "attributes": {
+      "first": "David",
+      "last": "Tang"
+    },
+    "relationships": {
+      "pets": {
+        "data": [
+          { "id": 1, "type": "pets" },
+          { "id": 3, "type": "pets" }
+        ]
+      }
+    }
+  },
+  "included": [
+    {
+      "type": "pets",
+      "id": "1",
+      "attributes": {
+        "name": "Fiona"
+      }
+    },
+    {
+      "type": "pets",
+      "id": "3",
+      "attributes": {
+        "name": "Biscuit"
+      }
+    }
+  ]
+}
+```
+
+The `included` key is used for sideloading data and contains an array of
+all related data. User 8 has 2 pets declared under `relationships`. The
+data in the `included` array contains the associated records using the
+same object structure for a single resource (having keys for `type`,
+`id`, and `attributes`).
+
+Even though JSON API seems a little verbose, I like that there is a
+documented specification so that those who use it can have a common
+understanding of their API data structure. This is particularly useful
+in large teams. There is a lot more to JSON API, so check out the
+specification for more information.
+
+**Serializer**
+
+*DS.Serializer* is an abstract class that *RESTSerializer*,
+*JSONSerializer*, and *JSONAPISerializer* extend from. As mentioned in
+the Ember Guides, you would use this serializer if your API is wildly
+different and one of the other serializers cannot be used. Personally I
+haven’t found myself in a situation where I’ve needed to do this, and
+hopefully you don’t either!
+
+**Conclusion**
+
+There is a lot more to these serializers, especially the
+*JSONAPISerializer*, but hopefully this helped point you in the right
+direction. To work efficiently with Ember Data, figure out what
+structure your API data is in and choose the serializer that best
+matches it. If you are starting from scratch and you have control over
+your API, try and go with a format that one of the serializers expects
+so that you don’t have to massage your data too much. Also, following
+the expected format for one of the serializers makes it that much easier
+for other developers to hop onto your project. Hopefully this provided a
+good overview of what is expected by each serializer so you can easily
+determine which one fits your project’s needs.
+
+Interested in learning more about Ember Data and how to use it with any
+API? Check out the book [Ember Data in the Wild - Getting Ember Data to
+Work With Your API][2].
+
 ### August 2017 Oleg G.Kapranov
+
+[1]: http://jsonapi.org/
+[2]: https://leanpub.com/emberdatainthewild
