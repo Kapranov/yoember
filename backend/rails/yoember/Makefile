@@ -80,6 +80,9 @@ server:
 test: clean
 	$(V)rake test
 
+rspec:
+	$(V)bundle exec rspec
+
 start: down clean brakeman
 	$(V)echo "\n\n\t  Start App $(DEVELOPMENT) Enviroment\n\n\t     $(LOCALSERVER)\n\n"
 	$(V)bundle exec rails s -b api.dev.local

@@ -54,6 +54,7 @@ group :test do
   gem 'rails-controller-testing'
   gem 'shoulda-matchers',         require: false
   gem 'shoulda-context',          require: false
+  gem 'shoulda-callback-matchers'
   gem 'cucumber-rails',           require: false
   gem 'cucumber-api',             require: false
   gem 'cucumber-api-steps',       require: false

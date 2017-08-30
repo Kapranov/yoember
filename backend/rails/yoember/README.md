@@ -69,6 +69,23 @@ $ http PUT :3000/invitations/4 email="oleg@example.com"
 $ http DELETE :3000/invitations/1
 ```
 
+> Usage `open-uri`
+
+```
+# http://ruby-doc.org/stdlib-2.0.0/libdoc/open-uri/rdoc/OpenURI.html
+require 'open-uri'
+
+# Go fetch the contents of a URL & store them as a String
+response = open('http://127.0.0.1:3000').read
+
+# "Pretty prints" the result to look like a web page instead of one
+# long string of HTML
+URI.parse(response).class
+
+# Print the contents of the website to the console
+puts "\n\n#{response.inspect}\n\n"
+```
+
 > Which Ember Data Serializer Should I Use?
 
 A serializer in Ember Data is used to massage data as it is transferred
@@ -406,3 +423,7 @@ Work With Your API][2] and [source code][3] from book.
 [2]: https://leanpub.com/emberdatainthewild
 [3]: https://github.com/skaterdav85/ember-data-in-the-wild
 [4]: http://thejsguy.com/
+[5]: https://github.com/taf2/curb
+[6]: https://relishapp.com/rspec/rspec-rails/v/3-6/docs
+[7]: https://github.com/thoughtbot/shoulda-matchers
+[8]: https://github.com/jdliss/shoulda-callback-matchers
