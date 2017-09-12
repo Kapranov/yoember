@@ -20,6 +20,6 @@ Rails.application.configure do
 end
 
 Rails.application.routes.default_url_options = {
-  host: 'localhost',
-  port: '3000'
+  host: Rails.application.secrets.domain_name,
+  port: Rails.application.secrets.port
 }

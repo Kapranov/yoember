@@ -21,11 +21,8 @@ module Yoember
     config.eager_load_paths << Rails.root.join('lib')
     config.action_controller.perform_caching = true
     config.cache_store = :redis_store, Rails.application.secrets.redis_cache, { expires_in: 90.minutes }
-    config.middleware.use Rack::Throttle::Interval, :min => 3.0, :cache => Redis.new, :key_prefix => :throttle
     config.debug_exception_response_format = :api
-    config.middleware.use Rack::Throttle::Interval
     config.exceptions_app = self.routes
-    config.middleware.insert_before Rack::Head, CatchJsonParseErrors
     config.lograge.keep_original_rails_log = true
     config.lograge.logger = ActiveSupport::Logger.new "#{Rails.root}/log/#{Rails.env}_lograge.log"
     config.lograge.formatter = ->(data) { "Called #{data[:controller]}" }

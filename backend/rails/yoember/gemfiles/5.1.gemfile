@@ -36,9 +36,9 @@ group :development, :test do
   gem 'prmd'
   gem 'faker'
   gem 'rspec-rails'
-  gem 'rspec-collection_matchers'
   gem 'rspec-expectations'
   gem 'rspec-json_expectations'
+  gem 'rspec-collection_matchers'
   gem 'rails-controller-testing'
   gem 'factory_girl_rails'
   gem 'awesome_print'
@@ -67,7 +67,7 @@ group :test do
   gem 'jsonapi_expectations'
   gem 'jsonapi_spec_helpers'
   gem 'shoulda-matchers'
-  gem 'shoulda-context',          require: false
+  gem 'shoulda-context'
   gem 'shoulda-callback-matchers'
   gem 'cucumber-rails',           require: false
   gem 'cucumber-api',             require: false

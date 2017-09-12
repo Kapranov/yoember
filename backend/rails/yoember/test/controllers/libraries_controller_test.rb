@@ -26,7 +26,7 @@ class LibrariesControllerTest < ActionController::TestCase
     assert_equal library.name, jdata['data']['attributes']['name']
     assert_equal library.address, jdata['data']['attributes']['address']
     assert_equal library.phone, jdata['data']['attributes']['phone']
-    assert_equal library_url(library, { host: "localhost", port: 3000 }), jdata['data']['links']['self']
+    assert_equal library_url(library, { host: "api.dev.local", port: 3000 }), jdata['data']['links']['self']
   end
 
   test "Should get JSON:API error block when requesting library data with invalid ID" do

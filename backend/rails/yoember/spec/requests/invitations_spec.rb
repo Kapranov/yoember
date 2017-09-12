@@ -28,30 +28,30 @@ RSpec.describe 'Invitations API', type: :request do
     context 'returns invitations' do
       specify do
         #expect(response.header['Content-Type']).to include 'application/vnd.api+json'
-        #expect(response.content_type).to eq("application/vnd.api+json")
-        #expect(response).to have_http_status(200)
+        expect(response.content_type).to eq("application/vnd.api+json")
+        expect(response).to have_http_status(200)
 
         expect(invitation).not_to be_nil
-        #expect(json_response).not_to be_empty
-        #expect(json_response.size).to eq 2
-        #expect(json_response.count).to eq 2
-        #expect(json_response.length).to eq 2
-        #expect(response).to match_response_schema('invitation')
+        expect(json_response).not_to be_empty
+        expect(json_response.size).to eq 2
+        expect(json_response.count).to eq 2
+        expect(json_response.length).to eq 2
+        expect(response).to match_response_schema('invitation')
         #expect(json_response.first).to eq invitation.email
         #expect(json_body['data'].first['invitation']['email']).to eq invitation.email
 
-        #expect(json_response).to include_json({
-        #  data: [{
-        #    id: "#{invitation.id}",
-        #    type: "invitations",
-        #    attributes: {
-        #      email: "#{invitation.email}"
-        #    },
-        #    links: {
-        #      self: "http://api.dev.local:3000/invitations/#{invitation.id}"
-        #    }
-        #  }]
-        #})
+        expect(json_response).to include_json({
+          data: [{
+            id: "#{invitation.id}",
+            type: "invitations",
+            attributes: {
+              email: "#{invitation.email}"
+            },
+            links: {
+              self: "http://api.dev.local:3000/invitations/#{invitation.id}"
+            }
+          }]
+        })
       end
 
       # invitation_ids = json_response['data'].map{ |unit| unit['attributes']['emails'].to_i }

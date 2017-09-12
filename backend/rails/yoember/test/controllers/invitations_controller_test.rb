@@ -24,7 +24,7 @@ class InvitationsControllerTest < ActionController::TestCase
     jdata = JSON.parse response.body
     assert_equal invitation.id.to_s, jdata['data']['id']
     assert_equal invitation.email, jdata['data']['attributes']['email']
-    assert_equal invitation_url(invitation, { host: "localhost", port: 3000 }), jdata['data']['links']['self']
+    assert_equal invitation_url(invitation, { host: "api.dev.local", port: 3000 }), jdata['data']['links']['self']
   end
 
   test "Should get JSON:API error block when requesting invitation data with invalid ID" do
