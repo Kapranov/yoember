@@ -1,13 +1,13 @@
 class ErrorsController < ApplicationController
   def not_found
-    render json: { errors: ["Not Found"]}.to_json, status: 404
+    json_response(Oj.dump({errors: ["Not Found"],  meta: meta}, status: 404, mode: :compat))
   end
 
   def unacceptable
-    render json: { errors: ["Unprocessable Entity"]}.to_json, status: 422
+    json_response(Oj.dump({errors: ["Unprocessable Entity"],  meta: meta}, status: 422, mode: :compat))
   end
 
   def internal_server_error
-    render json: { errors: ["Internal Server Error"]}.to_json, status: 500
+    json_response(Oj.dump({errors: ["Internal Server Error"],  meta: meta}, status: 500, mode: :compat))
   end
 end

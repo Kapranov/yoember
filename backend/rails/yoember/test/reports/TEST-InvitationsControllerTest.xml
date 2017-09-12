@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="InvitationsControllerTest" skipped="0" failures="0" errors="0" tests="10" assertions="29" time="0.32318601299994043">
+  <testcase name="test_Should_delete_invitation" classname="InvitationsControllerTest" assertions="5" time="0.23492507199989632">
+  </testcase>
+  <testcase name="test_Updating_an_existing_invitation_with_valid_data_should_update_that_invitation" classname="InvitationsControllerTest" assertions="4" time="0.022802788000262808">
+  </testcase>
+  <testcase name="test_Should_get_JSON:API_error_block_when_requesting_invitation_data_with_invalid_ID" classname="InvitationsControllerTest" assertions="4" time="0.0029728680001426255">
+  </testcase>
+  <testcase name="test_Should_get_properly_sorted_list" classname="InvitationsControllerTest" assertions="1" time="0.0017810329991334584">
+  </testcase>
+  <testcase name="test_Creating_new_invitation_with_invalid_type_in_JSON_data_should_result_in_error" classname="InvitationsControllerTest" assertions="1" time="0.0030879390014888486">
+  </testcase>
+  <testcase name="test_Creating_new_invitation_without_sending_correct_content-type_should_result_in_error" classname="InvitationsControllerTest" assertions="1" time="0.0023326539994741324">
+  </testcase>
+  <testcase name="test_Creating_new_invitation_with_valid_data_should_create_new_invitation" classname="InvitationsControllerTest" assertions="2" time="0.00780702699921676">
+  </testcase>
+  <testcase name="test_Should_get_valid_list_of_invitations" classname="InvitationsControllerTest" assertions="5" time="0.011462753000159864">
+  </testcase>
+  <testcase name="test_Creating_new_invitation_with_invalid_data_should_result_in_error" classname="InvitationsControllerTest" assertions="2" time="0.027412010000261944">
+  </testcase>
+  <testcase name="test_Should_get_valid_invitation_data" classname="InvitationsControllerTest" assertions="4" time="0.008601868999903672">
+  </testcase>
+</testsuite>

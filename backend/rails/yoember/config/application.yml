@@ -1,0 +1,27 @@
+general: &general
+  PORT:                 '3000'
+  CORS:                 '127.0.0.1:3000'
+  LOCALHOST:            '127.0.0.1'
+  DOMAIN_NAME:          'api.dev.local'
+  DOMAIN_NAME_PORT:     'api.dev.local:3000'
+  RACK_CORS_ORIGINS:    'localhost:4200'
+
+redis: &redis
+  REDIS_URL:            'redis://localhost:6379/0'
+  REDIS_DATA:           'yoember_data'
+  REDIS_CACHE:          'redis://localhost:6379/0/yoember_cache'
+
+development:
+  <<: *general
+  <<: *redis
+  SECRET_KEY_BASE:    '8408570e6bddc356ad6dc6a477821d6e619d3022b9f910f6c18afa2e618f7c77c454ac3903d869b4619a630df6cc264af4467f6332caa4f53b73ddb1b1bcb444'
+
+test:
+  <<: *general
+  <<: *redis
+  SECRET_KEY_BASE:    '15b59983777cdd4ee01c33d48e93e8a7554b5726df0a975ecf399bf9787996c835f6933bedd7f916e1b324e649c31cef03e36daf167814e687b17d2081385f21'
+
+production:
+  <<: *general
+  <<: *redis
+  SECRET_KEY_BASE:    '73396bf7dc761b154b5df2bac5afe29cd8d8444dc2c121fab092003f929da45335c2a25c207b64021844e85e6b564d9caa03f125fd72ad3e027abedf27fe4d59'

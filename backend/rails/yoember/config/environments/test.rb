@@ -18,3 +18,8 @@ Rails.application.configure do
     config.logger = ActiveSupport::TaggedLogging.new(logger)
   end
 end
+
+Rails.application.routes.default_url_options = {
+  host: 'localhost',
+  port: '3000'
+}

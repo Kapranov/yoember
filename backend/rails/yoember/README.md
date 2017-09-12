@@ -13,6 +13,11 @@ bundle exec rspec
 bundel exec cucumber
 ```
 
+> "Do not test APIs with Capybara. It wasn’t designed for it."
+> - Jonas Nicklas
+
+Instead, use Rack::Test, rather than the Capybara internals.
+
 > Test it out
 
 ```
@@ -417,13 +422,24 @@ Interested in learning more about Ember Data and how to use it with any
 API? Check out the book [Ember Data in the Wild - Getting Ember Data to
 Work With Your API][2] and [source code][3] from book.
 
-### August 2017 Oleg G.Kapranov
+### September 2017 Oleg G.Kapranov
 
-[1]: http://jsonapi.org/
-[2]: https://leanpub.com/emberdatainthewild
-[3]: https://github.com/skaterdav85/ember-data-in-the-wild
-[4]: http://thejsguy.com/
-[5]: https://github.com/taf2/curb
-[6]: https://relishapp.com/rspec/rspec-rails/v/3-6/docs
-[7]: https://github.com/thoughtbot/shoulda-matchers
-[8]: https://github.com/jdliss/shoulda-callback-matchers
+[1]:  http://jsonapi.org/
+[2]:  https://leanpub.com/emberdatainthewild
+[3]:  https://github.com/skaterdav85/ember-data-in-the-wild
+[4]:  http://thejsguy.com/
+[5]:  https://github.com/taf2/curb
+[6]:  http://www.betterspecs.org/
+[7]:  https://relishapp.com/rspec/rspec-rails/v/3-6/docs
+[8]:  https://github.com/thoughtbot/shoulda-matchers
+[9]:  https://github.com/jdliss/shoulda-callback-matchers
+[10]: http://api.rubyonrails.org/v5.1/
+[11]: http://apionrails.icalialabs.com
+[12]: https://github.com/eliotsykes/rspec-rails-examples
+[13]: https://github.com/evrone/factory_girl-seeds
+[14]: https://github.com/ruby-json-schema/json-schema
+[15]: https://github.com/thoughtbot/json_matchers
+[16]: https://robots.thoughtbot.com/validating-json-schemas-with-an-rspec-matcher
+[17]: http://www.amielmartin.com/blog/2017/08/31/how-ember-data-loads-async-relationships
+[18]: https://spacetelescope.github.io/understanding-json-schema/index.html
+[19]: https://brandur.org/elegant-apis

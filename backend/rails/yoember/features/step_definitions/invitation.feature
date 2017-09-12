@@ -4,4 +4,4 @@ Feature: Invitations list
     And I send a GET request to "/invitations"
     Then the response status should be "200"
     And the JSON response should have "$..email" with the text "MyString"
-    And the JSON response should have "$..email" with a length of 1
+    And the JSON response should have "$..email" with a length of 3

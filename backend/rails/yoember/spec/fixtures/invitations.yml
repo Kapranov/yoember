@@ -1,2 +1,11 @@
 one:
+  id: 1
+  email: MyString
+
+two:
+  id: 2
+  email: MyString
+
+three:
+  id: 3
   email: MyString

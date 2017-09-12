@@ -1,24 +1,16 @@
 class ApplicationController < ActionController::API
-  include ActionController::MimeResponds
-  include ActionController::StrongParameters
+  include Response
+  include ExceptionHandler
   include ActionController::Serialization
-  include AbstractController::Callbacks
 
   before_action :set_default_format
+  before_action :check_header
   after_action  :set_online
-
-  def meta
-    { copyright: " © #{Time.now.year} LugaTeX - #{Rails.env.upcase} Project Public License (LPPL)." }
-  end
-
-  def default_meta
-    { licence: 'CC-0', authors: ['LugaTeX Inc.'] }
-  end
 
   def json_for(target, options = {})
     options[:scope] ||= self
     options[:url_options] ||= url_options
-    data = ActiveModelSerializers::SerializableResource.new(target, options)
+    ActiveModelSerializers::SerializableResource.new(target, options)
   end
 
   private
@@ -31,7 +23,32 @@ class ApplicationController < ActionController::API
     request.format = :json
   end
 
+  def meta
+    { copyright: " © #{Time.now.year} LugaTeX - #{Rails.env.upcase} Project Public License (LPPL).", licence: 'CC-0' }
+  end
+
+  def default_meta
+    { licence: 'CC-0', authors: ['LugaTeX Inc.'] }
+  end
+
+  def check_header
+    if ['POST','PUT','PATCH'].include? request.method
+      if request.content_type != "application/vnd.api+json"
+        head 406 and return
+      end
+    end
+  end
+
+  def validate_type
+    if params['data'] && params['data']['type']
+      if params['data']['type'] == params[:controller]
+        return true
+      end
+    end
+    head 409 and return
+  end
+
   def render_error(resource, status)
-    render json: resource, status: status, adapter: :json_api, serializer: ErrorSerializer
+    render json: resource, status: status, adapter: :json_api, serializer: ActiveModel::Serializer::ErrorSerializer
   end
 end

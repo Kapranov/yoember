@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="InvitationsController" skipped="0" failures="0" errors="0" tests="1" assertions="1" time="0.23050304099888308">
-  <testcase name="test_0001_should be successful" classname="InvitationsController" assertions="1" time="0.23050304099888308">
-  </testcase>
-</testsuite>

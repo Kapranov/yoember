@@ -34,8 +34,7 @@ bundle:
 	$(V)rm -f Gemfile.lock
 	$(V)bundle
 
-clean: bundle
-	$(V)clear
+clean:
 	$(V)bundle exec rake tmp:clear
 	$(V)bundle exec rake log:clear
 
@@ -51,38 +50,60 @@ redis_up:
 redis_down:
 	$(V)sudo service redis_6379 stop
 
-db_create:
+db_create: clean
 	$(V)rake db:create
 
-db_migrate:
+db_migrate: clean
 	$(V)rake db:migrate
 
-db_drop:
+db_drop: clean
 	$(V)rake db:drop
 
-db_reset:
+db_reset: clean
 	$(V)rake db:reset
 
-db_seed:
+db_seed: clean
 	$(V)rake db:seed
 
-db_reload:
+db_reload: clean
 	$(V)rake db:reload
 
-db_setup: clean db_drop db_create db_migrate db_seed
+db_empty:
+	$(V)rake db:empty RAILS_ENV=test
+	$(V)rake db:empty RAILS_ENV=development
 
-brakeman:
+db_dev:
+	$(V)rake db:drop RAILS_ENV=development
+	$(V)rake db:create RAILS_ENV=development
+	$(V)rake db:migrate RAILS_ENV=development
+	$(V)rake db:seed RAILS_ENV=development
+
+db_test:
+	$(V)rake db:drop RAILS_ENV=test
+	$(V)rake db:create RAILS_ENV=test
+	$(V)rake db:migrate RAILS_ENV=test
+	$(V)rake db:seed RAILS_ENV=test
+
+db_setup: clean db_dev
+
+brakeman: clean
 	$(V)brakeman -d
 
-server:
+server: clean
 	$(V)ruby -run -e httpd . -p 3000
 
 test: clean
 	$(V)rake test
 
-rspec:
-	$(V)bundle exec rspec
+spec: clean
+	$(V)clear
+	$(V)bundle exec rspec spec
+
+cuc: clean
+	$(V)bundle exec cucumber
 
 start: down clean brakeman
 	$(V)echo "\n\n\t  Start App $(DEVELOPMENT) Enviroment\n\n\t     $(LOCALSERVER)\n\n"
 	$(V)bundle exec rails s -b api.dev.local
+
+.PHONY: spec

@@ -8,6 +8,8 @@ require "action_controller/railtie"
 require "action_view/railtie"
 require "rails/test_unit/railtie"
 require "./lib/middleware/catch_json_parse_errors.rb"
+require 'rack/throttle'
+
 
 Bundler.require(*Rails.groups)
 
@@ -21,6 +23,7 @@ module Yoember
     config.cache_store = :redis_store, Rails.application.secrets.redis_cache, { expires_in: 90.minutes }
     config.middleware.use Rack::Throttle::Interval, :min => 3.0, :cache => Redis.new, :key_prefix => :throttle
     config.debug_exception_response_format = :api
+    config.middleware.use Rack::Throttle::Interval
     config.exceptions_app = self.routes
     config.middleware.insert_before Rack::Head, CatchJsonParseErrors
     config.lograge.keep_original_rails_log = true
@@ -29,27 +32,8 @@ module Yoember
     config.lograge.custom_options = lambda do |event|
       {:time => event.time, :search_engine => event.payload[:search_engine], :user_agent => event.payload[:user_agent]}
     end
-
     config.middleware.delete Rack::Sendfile
     config.middleware.delete Rack::Runtime
-
-    config.generators do |g|
-      g.factory_girl true
-      # For Minitest
-      # g.test_framework :minitest, spec: false, fixture: true
-      # g.test_framework :minitest, spec: true
-      # For RSpec
-      g.test_framework :rspec,
-        fixtures: true,
-        view_specs: false,
-        helper_specs: false,
-        routing_specs: false,
-        controller_specs: true,
-        request_specs: true
-      g.helper false
-      g.decorator false
-      g.controller assets: false
-      g.fixture_replacement :factory_girl, :dir => "spec/factories"
-    end
+    config.middleware.insert_before Rack::Head, CatchJsonParseErrors
   end
 end

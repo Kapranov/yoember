@@ -1,11 +1,10 @@
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
-require 'capybara/rails'
 require "minitest/rails"
 require "minitest/pride"
 require "minitest/reporters"
-require "minitest/rails/capybara"
+require 'database_cleaner'
 
 Minitest::Reporters.use! [
   Minitest::Reporters::DefaultReporter.new(:color => true),
@@ -18,4 +17,16 @@ Minitest::Reporters.use! [
 
 class ActiveSupport::TestCase
   fixtures :all
+end
+
+DatabaseCleaner.strategy = :transaction
+
+class Minitest::Spec
+  before :each do
+    DatabaseCleaner.start
+  end
+
+  after :each do
+    DatabaseCleaner.clean
+  end
 end

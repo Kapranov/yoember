@@ -1,37 +1,53 @@
 class InvitationsController < ApplicationController
   before_action :set_invitation, only: [:show, :update, :destroy]
+  before_action :validate_type, only: [:create, :update]
 
+  # GET /invitations
   def index
     @invitations = Invitation.order(email: :asc)
-    render json: Oj.dump(json_for(@invitations, meta: meta), mode: :compat)
+    json_response(Oj.dump(json_for(@invitations, meta: meta), mode: :compat))
   end
 
+  # GET /invitations/:id
   def show
-    render json: Oj.dump(json_for(@invitation, meta: meta), mode: :compat)
+    json_response(Oj.dump(json_for(@invitation, meta: meta), mode: :compat))
   end
 
+  # POST /invitations
   def create
     @invitation = Invitation.new(invitation_params)
     if @invitation.save
-      render json: Oj.dump(json_for(@invitation, meta: meta), mode: :compat)
+      json_response(Oj.dump(json_for(@invitation, meta: meta), status: :created, mode: :compat))
     else
-      render json: @invitation.errors, status: :unprocessable_entity
+      render json: @invitation, status: 422, serializer: ActiveModel::Serializer::ErrorSerializer, meta: default_meta
+      # json_response(Oj.dump(@invitation.errors, meta: default_meta, status: :unprocessable_entity, mode: :compat))
     end
   end
 
+  # PUT /invitations/:id
   def update
     if @invitation.update(invitation_params)
-      render json: Oj.dump(json_for(@invitation, meta: meta), mode: :compat)
+      #head :no_content
+      json_response(Oj.dump(json_for(@invitation, meta: meta), mode: :compat))
     else
-      render json: @invitation.errors, status: :unprocessable_entity
+      json_response(Oj.dump(@invitation.errors, meta: default_meta, status: :unprocessable_entity, mode: :compat))
     end
   end
+  #def update
+  #  if @invitation.update_attributes(invitation_params)
+  #    render json: @invitation, status: :ok, meta: default_meta
+  #  else
+  #    render_error(@invitation, :unprocessable_entity)
+  #  end
+  #end
 
+  # DELETE /invitations/:id
   def destroy
     if @invitation.destroy
-      render json: { message: "invitation deleted" }.to_json, status: :ok
+      json_response(Oj.dump({message: "The invitation has been deleted", meta: meta}, mode: :compat))
+      #head 204
     else
-      render json: @invitation.errors, status: :unprocessable_entity
+      json_response(Oj.dump(@invitation.errors, meta: default_meta, status: :unprocessable_entity, mode: :compat))
     end
   end
 

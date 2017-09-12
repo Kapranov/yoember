@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="LibrariesControllerTest" skipped="0" failures="0" errors="0" tests="10" assertions="39" time="0.10914876100105175">
+  <testcase name="test_Creating_new_library_with_invalid_type_in_JSON_data_should_result_in_error" classname="LibrariesControllerTest" assertions="1" time="0.0401156580010138">
+  </testcase>
+  <testcase name="test_Should_delete_library" classname="LibrariesControllerTest" assertions="5" time="0.009023493999848142">
+  </testcase>
+  <testcase name="test_Creating_new_library_with_invalid_data_should_result_in_error" classname="LibrariesControllerTest" assertions="4" time="0.008021178000490181">
+  </testcase>
+  <testcase name="test_Should_get_properly_sorted_list" classname="LibrariesControllerTest" assertions="1" time="0.0027347790000931127">
+  </testcase>
+  <testcase name="test_Should_get_JSON:API_error_block_when_requesting_library_data_with_invalid_ID" classname="LibrariesControllerTest" assertions="4" time="0.004076056000485551">
+  </testcase>
+  <testcase name="test_Should_get_valid_list_of_libraries" classname="LibrariesControllerTest" assertions="5" time="0.01796223400015151">
+  </testcase>
+  <testcase name="test_Should_get_valid_user_data" classname="LibrariesControllerTest" assertions="6" time="0.007691819999308791">
+  </testcase>
+  <testcase name="test_Updating_an_existing_library_with_valid_data_should_update_that_library" classname="LibrariesControllerTest" assertions="6" time="0.009167582998998114">
+  </testcase>
+  <testcase name="test_Creating_new_library_without_sending_correct_content-type_should_result_in_error" classname="LibrariesControllerTest" assertions="1" time="0.0028485479997470975">
+  </testcase>
+  <testcase name="test_Creating_new_library_with_valid_data_should_create_new_library" classname="LibrariesControllerTest" assertions="6" time="0.007507411000915454">
+  </testcase>
+</testsuite>

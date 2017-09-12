@@ -1,5 +1,3 @@
 --color
---order=random
---format documentation
+--format d
 --require spec_helper
---require rails_helper
