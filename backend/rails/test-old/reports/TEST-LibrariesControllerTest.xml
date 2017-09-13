@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="LibrariesControllerTest" skipped="0" failures="0" errors="3" tests="10" assertions="22" time="0.05459786499704933">
+  <testcase name="test_Creating_new_library_with_invalid_data_should_result_in_error" classname="LibrariesControllerTest" assertions="4" time="0.014865035000184434">
+  </testcase>
+  <testcase name="test_Should_get_valid_user_data" classname="LibrariesControllerTest" assertions="0" time="0.005452774999866961">
+    <error type="test_Should_get_valid_user_data" message="ArgumentError: wrong number of arguments (given 1, expected 0)...">
+Failure:
+test_Should_get_valid_user_data(LibrariesControllerTest) [/home/kapranov/Apps-Elixir/bin/yoember/backend/rails/yoember/app/serializers/library_serializer.rb:11]:
+ArgumentError: wrong number of arguments (given 1, expected 0)
+    app/serializers/library_serializer.rb:11:in `to_s'
+    app/serializers/library_serializer.rb:11:in `created_at'
+    config/initializers/json_encoding.rb:4:in `encode'
+    app/controllers/libraries_controller.rb:13:in `dump'
+    app/controllers/libraries_controller.rb:13:in `show'
+    test/controllers/libraries_controller_test.rb:22:in `block in &lt;class:LibrariesControllerTest&gt;'
+    </error>
+  </testcase>
+  <testcase name="test_Should_get_JSON:API_error_block_when_requesting_library_data_with_invalid_ID" classname="LibrariesControllerTest" assertions="4" time="0.0027482779987622052">
+  </testcase>
+  <testcase name="test_Creating_new_library_with_valid_data_should_create_new_library" classname="LibrariesControllerTest" assertions="6" time="0.006511315999887302">
+  </testcase>
+  <testcase name="test_Creating_new_library_without_sending_correct_content-type_should_result_in_error" classname="LibrariesControllerTest" assertions="1" time="0.0018808379991241964">
+  </testcase>
+  <testcase name="test_Creating_new_library_with_invalid_type_in_JSON_data_should_result_in_error" classname="LibrariesControllerTest" assertions="1" time="0.005180768999707652">
+  </testcase>
+  <testcase name="test_Should_delete_library" classname="LibrariesControllerTest" assertions="5" time="0.006185084001117502">
+  </testcase>
+  <testcase name="test_Should_get_valid_list_of_libraries" classname="LibrariesControllerTest" assertions="0" time="0.003794518999711727">
+    <error type="test_Should_get_valid_list_of_libraries" message="ArgumentError: wrong number of arguments (given 1, expected 0)...">
+Failure:
+test_Should_get_valid_list_of_libraries(LibrariesControllerTest) [/home/kapranov/Apps-Elixir/bin/yoember/backend/rails/yoember/app/serializers/library_serializer.rb:11]:
+ArgumentError: wrong number of arguments (given 1, expected 0)
+    app/serializers/library_serializer.rb:11:in `to_s'
+    app/serializers/library_serializer.rb:11:in `created_at'
+    config/initializers/json_encoding.rb:4:in `encode'
+    app/controllers/libraries_controller.rb:7:in `dump'
+    app/controllers/libraries_controller.rb:7:in `index'
+    test/controllers/libraries_controller_test.rb:6:in `block in &lt;class:LibrariesControllerTest&gt;'
+    </error>
+  </testcase>
+  <testcase name="test_Updating_an_existing_library_with_valid_data_should_update_that_library" classname="LibrariesControllerTest" assertions="0" time="0.006418825998480315">
+    <error type="test_Updating_an_existing_library_with_valid_data_should_update_that_library" message="ArgumentError: wrong number of arguments (given 1, expected 0)...">
+Failure:
+test_Updating_an_existing_library_with_valid_data_should_update_that_library(LibrariesControllerTest) [/home/kapranov/Apps-Elixir/bin/yoember/backend/rails/yoember/app/serializers/library_serializer.rb:11]:
+ArgumentError: wrong number of arguments (given 1, expected 0)
+    app/serializers/library_serializer.rb:11:in `to_s'
+    app/serializers/library_serializer.rb:11:in `created_at'
+    config/initializers/json_encoding.rb:4:in `encode'
+    app/controllers/libraries_controller.rb:34:in `dump'
+    app/controllers/libraries_controller.rb:34:in `update'
+    test/controllers/libraries_controller_test.rb:98:in `block in &lt;class:LibrariesControllerTest&gt;'
+    </error>
+  </testcase>
+  <testcase name="test_Should_get_properly_sorted_list" classname="LibrariesControllerTest" assertions="1" time="0.001560425000207033">
+  </testcase>
+</testsuite>

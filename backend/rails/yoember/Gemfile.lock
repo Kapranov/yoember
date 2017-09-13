@@ -75,6 +75,7 @@ GEM
       activesupport
     coderay (1.1.2)
     concurrent-ruby (1.0.5)
+    connection_pool (2.2.1)
     cucumber (2.4.0)
       builder (>= 2.1.2)
       cucumber-core (~> 1.5.0)
@@ -292,7 +293,7 @@ GEM
       rspec-mocks (~> 3.6.0)
       rspec-support (~> 3.6.0)
     rspec-support (3.6.0)
-    ruby-progressbar (1.8.1)
+    ruby-progressbar (1.8.3)
     ruby_dep (1.5.0)
     shoulda-callback-matchers (1.1.4)
       activesupport (>= 3)
@@ -342,6 +343,7 @@ DEPENDENCIES
   bcrypt
   brakeman
   byebug
+  connection_pool
   cucumber-api
   cucumber-api-steps
   cucumber-rails

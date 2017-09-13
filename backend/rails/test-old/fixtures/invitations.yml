@@ -1,0 +1,6 @@
+<% 9.times do |i| %>
+  invitation_<%= i %>:
+    email: <%= "invitation_#{i}@example.com" %>
+    created_at: <%= i == 9 ? 1.hour.ago : Time.now %>
+    updated_at: <%= i == 5 ? 1.hour.ago : Time.now %>
+<% end %>

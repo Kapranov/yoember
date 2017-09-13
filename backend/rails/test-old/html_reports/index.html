@@ -13,24 +13,24 @@
     <div class="jumbotron">
         <h1>Test Results</h1>
         <p>
-            Finished in 0.32s, 61.78 tests/s, 210.04 assertions/s
+            Finished in 0.32s, 62.82 tests/s, 119.36 assertions/s
         </p>
         <p>
             <strong>
-            <span class="text-info">20 tests</span>,
-            <span class="text-info"> 68 assertions</span>,
+            <span class="">20 tests</span>,
+            <span class=""> 38 assertions</span>,
             <span class=""> 0 failures</span>,
-            <span class=""> 0 errors</span>,
+            <span class="text-danger"> 6 errors</span>,
             <span class=""> 0 skips</span>
             </strong>
         </p>
 
         <div class="progress">
-            <div class="progress-bar progress-bar-info" style="width: 100%">
-                100% passed
+            <div class="progress-bar progress-bar-info" style="width: 70%">
+                70% passed
             </div>
-            <div class="progress-bar progress-bar-danger" style="width: 0%">
-                0% failed
+            <div class="progress-bar progress-bar-danger" style="width: 30%">
+                30% failed
             </div>
             <div class="progress-bar progress-bar-warning" style="width: 0%">
                 0% skipped
@@ -44,12 +44,12 @@
         <div class="panel panel-default">
             <div class="panel-heading"><strong>InvitationsControllerTest</strong>
                 <span class="pull-right">
-                    <span class="text-info">10 tests</span>,
-                    <span class="text-info"> 29 assertions</span>,
+                    <span class="">10 tests</span>,
+                    <span class=""> 16 assertions</span>,
                     <span class=""> 0 failures</span>,
-                    <span class=""> 0 errors</span>,
+                    <span class="text-danger"> 3 errors</span>,
                     <span class=""> 0 skips</span>,
-                    <span> finished in 0.2451s</span>
+                    <span> finished in 0.2275s</span>
                 </span>
             </div>
             <div class="panel-body">
@@ -58,11 +58,80 @@
                         <div class="list-group-item">
                             <h5 class="list-group-item-heading">
                                 
+                                    <span class="glyphicon glyphicon-remove text-danger"  aria-hidden="true"></span>
+                                
+                                test_Should_get_valid_invitation_data
+                                <span class="pull-right">
+                                    Assertions 0, time 0.004217s
+                                </span>
+                            </h5>
+                            
+                                <pre class="list-group-item-text">/home/kapranov/Apps-Elixir/bin/yoember/backend/rails/yoember/app/serializers/invitation_serializer.rb:11
+
+ArgumentError: wrong number of arguments (given 1, expected 0)
+    app/serializers/invitation_serializer.rb:11:in `to_s'
+    app/serializers/invitation_serializer.rb:11:in `created_at'
+    config/initializers/json_encoding.rb:4:in `encode'
+    app/controllers/invitations_controller.rb:13:in `dump'
+    app/controllers/invitations_controller.rb:13:in `show'
+    test/controllers/invitations_controller_test.rb:22:in `block in <class:InvitationsControllerTest>'</pre>
+                            
+                        </div>
+                    
+                        <div class="list-group-item">
+                            <h5 class="list-group-item-heading">
+                                
+                                    <span class="glyphicon glyphicon-remove text-danger"  aria-hidden="true"></span>
+                                
+                                test_Should_get_valid_list_of_invitations
+                                <span class="pull-right">
+                                    Assertions 0, time 0.010328s
+                                </span>
+                            </h5>
+                            
+                                <pre class="list-group-item-text">/home/kapranov/Apps-Elixir/bin/yoember/backend/rails/yoember/app/serializers/invitation_serializer.rb:11
+
+ArgumentError: wrong number of arguments (given 1, expected 0)
+    app/serializers/invitation_serializer.rb:11:in `to_s'
+    app/serializers/invitation_serializer.rb:11:in `created_at'
+    config/initializers/json_encoding.rb:4:in `encode'
+    app/controllers/invitations_controller.rb:8:in `dump'
+    app/controllers/invitations_controller.rb:8:in `index'
+    test/controllers/invitations_controller_test.rb:6:in `block in <class:InvitationsControllerTest>'</pre>
+                            
+                        </div>
+                    
+                        <div class="list-group-item">
+                            <h5 class="list-group-item-heading">
+                                
+                                    <span class="glyphicon glyphicon-remove text-danger"  aria-hidden="true"></span>
+                                
+                                test_Updating_an_existing_invitation_with_valid_data_should_update_that_invitation
+                                <span class="pull-right">
+                                    Assertions 0, time 0.016218s
+                                </span>
+                            </h5>
+                            
+                                <pre class="list-group-item-text">/home/kapranov/Apps-Elixir/bin/yoember/backend/rails/yoember/app/serializers/invitation_serializer.rb:11
+
+ArgumentError: wrong number of arguments (given 1, expected 0)
+    app/serializers/invitation_serializer.rb:11:in `to_s'
+    app/serializers/invitation_serializer.rb:11:in `created_at'
+    config/initializers/json_encoding.rb:4:in `encode'
+    app/controllers/invitations_controller.rb:31:in `dump'
+    app/controllers/invitations_controller.rb:31:in `update'
+    test/controllers/invitations_controller_test.rb:88:in `block in <class:InvitationsControllerTest>'</pre>
+                            
+                        </div>
+                    
+                        <div class="list-group-item">
+                            <h5 class="list-group-item-heading">
+                                
                                     <span class="glyphicon glyphicon-ok text-info" aria-hidden="true"></span>
                                 
                                 test_Creating_new_invitation_with_invalid_data_should_result_in_error
                                 <span class="pull-right">
-                                    Assertions 2, time 0.009706s
+                                    Assertions 2, time 0.009098s
                                 </span>
                             </h5>
                             
@@ -75,7 +144,7 @@
                                 
                                 test_Creating_new_invitation_with_invalid_type_in_JSON_data_should_result_in_error
                                 <span class="pull-right">
-                                    Assertions 1, time 0.003463s
+                                    Assertions 1, time 0.160872s
                                 </span>
                             </h5>
                             
@@ -88,7 +157,7 @@
                                 
                                 test_Creating_new_invitation_with_valid_data_should_create_new_invitation
                                 <span class="pull-right">
-                                    Assertions 2, time 0.007398s
+                                    Assertions 2, time 0.010475s
                                 </span>
                             </h5>
                             
@@ -101,7 +170,7 @@
                                 
                                 test_Creating_new_invitation_without_sending_correct_content-type_should_result_in_error
                                 <span class="pull-right">
-                                    Assertions 1, time 0.158544s
+                                    Assertions 1, time 0.001843s
                                 </span>
                             </h5>
                             
@@ -114,7 +183,7 @@
                                 
                                 test_Should_delete_invitation
                                 <span class="pull-right">
-                                    Assertions 5, time 0.007331s
+                                    Assertions 5, time 0.006743s
                                 </span>
                             </h5>
                             
@@ -127,7 +196,7 @@
                                 
                                 test_Should_get_JSON:API_error_block_when_requesting_invitation_data_with_invalid_ID
                                 <span class="pull-right">
-                                    Assertions 4, time 0.003388s
+                                    Assertions 4, time 0.006084s
                                 </span>
                             </h5>
                             
@@ -140,46 +209,7 @@
                                 
                                 test_Should_get_properly_sorted_list
                                 <span class="pull-right">
-                                    Assertions 1, time 0.002064s
-                                </span>
-                            </h5>
-                            
-                        </div>
-                    
-                        <div class="list-group-item">
-                            <h5 class="list-group-item-heading">
-                                
-                                    <span class="glyphicon glyphicon-ok text-info" aria-hidden="true"></span>
-                                
-                                test_Should_get_valid_invitation_data
-                                <span class="pull-right">
-                                    Assertions 4, time 0.006285s
-                                </span>
-                            </h5>
-                            
-                        </div>
-                    
-                        <div class="list-group-item">
-                            <h5 class="list-group-item-heading">
-                                
-                                    <span class="glyphicon glyphicon-ok text-info" aria-hidden="true"></span>
-                                
-                                test_Should_get_valid_list_of_invitations
-                                <span class="pull-right">
-                                    Assertions 5, time 0.009526s
-                                </span>
-                            </h5>
-                            
-                        </div>
-                    
-                        <div class="list-group-item">
-                            <h5 class="list-group-item-heading">
-                                
-                                    <span class="glyphicon glyphicon-ok text-info" aria-hidden="true"></span>
-                                
-                                test_Updating_an_existing_invitation_with_valid_data_should_update_that_invitation
-                                <span class="pull-right">
-                                    Assertions 4, time 0.037415s
+                                    Assertions 1, time 0.001615s
                                 </span>
                             </h5>
                             
@@ -192,12 +222,12 @@
         <div class="panel panel-default">
             <div class="panel-heading"><strong>LibrariesControllerTest</strong>
                 <span class="pull-right">
-                    <span class="text-info">10 tests</span>,
-                    <span class="text-info"> 39 assertions</span>,
+                    <span class="">10 tests</span>,
+                    <span class=""> 22 assertions</span>,
                     <span class=""> 0 failures</span>,
-                    <span class=""> 0 errors</span>,
+                    <span class="text-danger"> 3 errors</span>,
                     <span class=""> 0 skips</span>,
-                    <span> finished in 0.0646s</span>
+                    <span> finished in 0.0546s</span>
                 </span>
             </div>
             <div class="panel-body">
@@ -206,11 +236,80 @@
                         <div class="list-group-item">
                             <h5 class="list-group-item-heading">
                                 
+                                    <span class="glyphicon glyphicon-remove text-danger"  aria-hidden="true"></span>
+                                
+                                test_Should_get_valid_list_of_libraries
+                                <span class="pull-right">
+                                    Assertions 0, time 0.003795s
+                                </span>
+                            </h5>
+                            
+                                <pre class="list-group-item-text">/home/kapranov/Apps-Elixir/bin/yoember/backend/rails/yoember/app/serializers/library_serializer.rb:11
+
+ArgumentError: wrong number of arguments (given 1, expected 0)
+    app/serializers/library_serializer.rb:11:in `to_s'
+    app/serializers/library_serializer.rb:11:in `created_at'
+    config/initializers/json_encoding.rb:4:in `encode'
+    app/controllers/libraries_controller.rb:7:in `dump'
+    app/controllers/libraries_controller.rb:7:in `index'
+    test/controllers/libraries_controller_test.rb:6:in `block in <class:LibrariesControllerTest>'</pre>
+                            
+                        </div>
+                    
+                        <div class="list-group-item">
+                            <h5 class="list-group-item-heading">
+                                
+                                    <span class="glyphicon glyphicon-remove text-danger"  aria-hidden="true"></span>
+                                
+                                test_Should_get_valid_user_data
+                                <span class="pull-right">
+                                    Assertions 0, time 0.005453s
+                                </span>
+                            </h5>
+                            
+                                <pre class="list-group-item-text">/home/kapranov/Apps-Elixir/bin/yoember/backend/rails/yoember/app/serializers/library_serializer.rb:11
+
+ArgumentError: wrong number of arguments (given 1, expected 0)
+    app/serializers/library_serializer.rb:11:in `to_s'
+    app/serializers/library_serializer.rb:11:in `created_at'
+    config/initializers/json_encoding.rb:4:in `encode'
+    app/controllers/libraries_controller.rb:13:in `dump'
+    app/controllers/libraries_controller.rb:13:in `show'
+    test/controllers/libraries_controller_test.rb:22:in `block in <class:LibrariesControllerTest>'</pre>
+                            
+                        </div>
+                    
+                        <div class="list-group-item">
+                            <h5 class="list-group-item-heading">
+                                
+                                    <span class="glyphicon glyphicon-remove text-danger"  aria-hidden="true"></span>
+                                
+                                test_Updating_an_existing_library_with_valid_data_should_update_that_library
+                                <span class="pull-right">
+                                    Assertions 0, time 0.006419s
+                                </span>
+                            </h5>
+                            
+                                <pre class="list-group-item-text">/home/kapranov/Apps-Elixir/bin/yoember/backend/rails/yoember/app/serializers/library_serializer.rb:11
+
+ArgumentError: wrong number of arguments (given 1, expected 0)
+    app/serializers/library_serializer.rb:11:in `to_s'
+    app/serializers/library_serializer.rb:11:in `created_at'
+    config/initializers/json_encoding.rb:4:in `encode'
+    app/controllers/libraries_controller.rb:34:in `dump'
+    app/controllers/libraries_controller.rb:34:in `update'
+    test/controllers/libraries_controller_test.rb:98:in `block in <class:LibrariesControllerTest>'</pre>
+                            
+                        </div>
+                    
+                        <div class="list-group-item">
+                            <h5 class="list-group-item-heading">
+                                
                                     <span class="glyphicon glyphicon-ok text-info" aria-hidden="true"></span>
                                 
                                 test_Creating_new_library_with_invalid_data_should_result_in_error
                                 <span class="pull-right">
-                                    Assertions 4, time 0.008343s
+                                    Assertions 4, time 0.014865s
                                 </span>
                             </h5>
                             
@@ -223,7 +322,7 @@
                                 
                                 test_Creating_new_library_with_invalid_type_in_JSON_data_should_result_in_error
                                 <span class="pull-right">
-                                    Assertions 1, time 0.005204s
+                                    Assertions 1, time 0.005181s
                                 </span>
                             </h5>
                             
@@ -236,7 +335,7 @@
                                 
                                 test_Creating_new_library_with_valid_data_should_create_new_library
                                 <span class="pull-right">
-                                    Assertions 6, time 0.006838s
+                                    Assertions 6, time 0.006511s
                                 </span>
                             </h5>
                             
@@ -249,7 +348,7 @@
                                 
                                 test_Creating_new_library_without_sending_correct_content-type_should_result_in_error
                                 <span class="pull-right">
-                                    Assertions 1, time 0.001901s
+                                    Assertions 1, time 0.001881s
                                 </span>
                             </h5>
                             
@@ -262,7 +361,7 @@
                                 
                                 test_Should_delete_library
                                 <span class="pull-right">
-                                    Assertions 5, time 0.006816s
+                                    Assertions 5, time 0.006185s
                                 </span>
                             </h5>
                             
@@ -275,7 +374,7 @@
                                 
                                 test_Should_get_JSON:API_error_block_when_requesting_library_data_with_invalid_ID
                                 <span class="pull-right">
-                                    Assertions 4, time 0.002899s
+                                    Assertions 4, time 0.002748s
                                 </span>
                             </h5>
                             
@@ -288,46 +387,7 @@
                                 
                                 test_Should_get_properly_sorted_list
                                 <span class="pull-right">
-                                    Assertions 1, time 0.008571s
-                                </span>
-                            </h5>
-                            
-                        </div>
-                    
-                        <div class="list-group-item">
-                            <h5 class="list-group-item-heading">
-                                
-                                    <span class="glyphicon glyphicon-ok text-info" aria-hidden="true"></span>
-                                
-                                test_Should_get_valid_list_of_libraries
-                                <span class="pull-right">
-                                    Assertions 5, time 0.009353s
-                                </span>
-                            </h5>
-                            
-                        </div>
-                    
-                        <div class="list-group-item">
-                            <h5 class="list-group-item-heading">
-                                
-                                    <span class="glyphicon glyphicon-ok text-info" aria-hidden="true"></span>
-                                
-                                test_Should_get_valid_user_data
-                                <span class="pull-right">
-                                    Assertions 6, time 0.007007s
-                                </span>
-                            </h5>
-                            
-                        </div>
-                    
-                        <div class="list-group-item">
-                            <h5 class="list-group-item-heading">
-                                
-                                    <span class="glyphicon glyphicon-ok text-info" aria-hidden="true"></span>
-                                
-                                test_Updating_an_existing_library_with_valid_data_should_update_that_library
-                                <span class="pull-right">
-                                    Assertions 6, time 0.007700s
+                                    Assertions 1, time 0.001560s
                                 </span>
                             </h5>
                             

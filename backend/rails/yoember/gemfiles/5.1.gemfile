@@ -30,7 +30,6 @@ gem 'active_model_serializers'
 gem 'swagger-docs'
 gem 'will_paginate'
 
-
 group :development, :test do
   gem 'byebug',                   platforms: [:mri]
   gem 'prmd'
@@ -52,7 +51,7 @@ end
 
 group :development do
   gem 'listen',                   '~> 3.1'
-  gem 'brakeman',                 require: false
+  gem 'brakeman'
   gem 'spring'
   gem 'spring-watcher-listen',    '~> 2.0'
 end
@@ -69,10 +68,11 @@ group :test do
   gem 'shoulda-matchers'
   gem 'shoulda-context'
   gem 'shoulda-callback-matchers'
-  gem 'cucumber-rails',           require: false
+  gem 'cucumber-rails'
   gem 'cucumber-api',             require: false
-  gem 'cucumber-api-steps',       require: false
+  gem 'cucumber-api-steps'
   gem 'minitest-rails'
   gem 'minitest-reporters'
   gem 'database_cleaner'
+  gem 'connection_pool'
 end

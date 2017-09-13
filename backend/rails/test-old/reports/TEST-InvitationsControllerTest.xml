@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="InvitationsControllerTest" skipped="0" failures="0" errors="3" tests="10" assertions="16" time="0.22749271499924362">
+  <testcase name="test_Creating_new_invitation_with_invalid_type_in_JSON_data_should_result_in_error" classname="InvitationsControllerTest" assertions="1" time="0.16087203600000066">
+  </testcase>
+  <testcase name="test_Should_get_JSON:API_error_block_when_requesting_invitation_data_with_invalid_ID" classname="InvitationsControllerTest" assertions="4" time="0.006084298000132549">
+  </testcase>
+  <testcase name="test_Creating_new_invitation_without_sending_correct_content-type_should_result_in_error" classname="InvitationsControllerTest" assertions="1" time="0.0018431720000080531">
+  </testcase>
+  <testcase name="test_Should_delete_invitation" classname="InvitationsControllerTest" assertions="5" time="0.006743234000168741">
+  </testcase>
+  <testcase name="test_Should_get_valid_list_of_invitations" classname="InvitationsControllerTest" assertions="0" time="0.010327971998776775">
+    <error type="test_Should_get_valid_list_of_invitations" message="ArgumentError: wrong number of arguments (given 1, expected 0)...">
+Failure:
+test_Should_get_valid_list_of_invitations(InvitationsControllerTest) [/home/kapranov/Apps-Elixir/bin/yoember/backend/rails/yoember/app/serializers/invitation_serializer.rb:11]:
+ArgumentError: wrong number of arguments (given 1, expected 0)
+    app/serializers/invitation_serializer.rb:11:in `to_s'
+    app/serializers/invitation_serializer.rb:11:in `created_at'
+    config/initializers/json_encoding.rb:4:in `encode'
+    app/controllers/invitations_controller.rb:8:in `dump'
+    app/controllers/invitations_controller.rb:8:in `index'
+    test/controllers/invitations_controller_test.rb:6:in `block in &lt;class:InvitationsControllerTest&gt;'
+    </error>
+  </testcase>
+  <testcase name="test_Updating_an_existing_invitation_with_valid_data_should_update_that_invitation" classname="InvitationsControllerTest" assertions="0" time="0.01621813000019756">
+    <error type="test_Updating_an_existing_invitation_with_valid_data_should_update_that_invitation" message="ArgumentError: wrong number of arguments (given 1, expected 0)...">
+Failure:
+test_Updating_an_existing_invitation_with_valid_data_should_update_that_invitation(InvitationsControllerTest) [/home/kapranov/Apps-Elixir/bin/yoember/backend/rails/yoember/app/serializers/invitation_serializer.rb:11]:
+ArgumentError: wrong number of arguments (given 1, expected 0)
+    app/serializers/invitation_serializer.rb:11:in `to_s'
+    app/serializers/invitation_serializer.rb:11:in `created_at'
+    config/initializers/json_encoding.rb:4:in `encode'
+    app/controllers/invitations_controller.rb:31:in `dump'
+    app/controllers/invitations_controller.rb:31:in `update'
+    test/controllers/invitations_controller_test.rb:88:in `block in &lt;class:InvitationsControllerTest&gt;'
+    </error>
+  </testcase>
+  <testcase name="test_Creating_new_invitation_with_invalid_data_should_result_in_error" classname="InvitationsControllerTest" assertions="2" time="0.009097622998524457">
+  </testcase>
+  <testcase name="test_Should_get_properly_sorted_list" classname="InvitationsControllerTest" assertions="1" time="0.0016148260001500603">
+  </testcase>
+  <testcase name="test_Creating_new_invitation_with_valid_data_should_create_new_invitation" classname="InvitationsControllerTest" assertions="2" time="0.010474792999957572">
+  </testcase>
+  <testcase name="test_Should_get_valid_invitation_data" classname="InvitationsControllerTest" assertions="0" time="0.004216631001327187">
+    <error type="test_Should_get_valid_invitation_data" message="ArgumentError: wrong number of arguments (given 1, expected 0)...">
+Failure:
+test_Should_get_valid_invitation_data(InvitationsControllerTest) [/home/kapranov/Apps-Elixir/bin/yoember/backend/rails/yoember/app/serializers/invitation_serializer.rb:11]:
+ArgumentError: wrong number of arguments (given 1, expected 0)
+    app/serializers/invitation_serializer.rb:11:in `to_s'
+    app/serializers/invitation_serializer.rb:11:in `created_at'
+    config/initializers/json_encoding.rb:4:in `encode'
+    app/controllers/invitations_controller.rb:13:in `dump'
+    app/controllers/invitations_controller.rb:13:in `show'
+    test/controllers/invitations_controller_test.rb:22:in `block in &lt;class:InvitationsControllerTest&gt;'
+    </error>
+  </testcase>
+</testsuite>

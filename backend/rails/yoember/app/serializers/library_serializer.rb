@@ -8,10 +8,10 @@ class LibrarySerializer < ActiveModel::Serializer
   end
 
   def created_at
-    "#{object.created_at.to_s(:short)}"
+    "#{object.created_at}"
   end
 
   def updated_at
-    "#{object.updated_at.to_s(:short)}"
+    "#{object.updated_at}"
   end
 end
