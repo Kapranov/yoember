@@ -3,10 +3,14 @@ require 'test_helper'
 class InvitationsIntegrationControllerTest < ActionDispatch::IntegrationTest
   #setup { @invitation = invitations(:one) }
 
-  #test "should get index" do
-  #  get invitations_url, as: :json
-  #  assert_response :success
-  #end
+  def setup
+    @invitation = Invitation.new
+  end
+
+  test "should get index" do
+    get invitations_url, as: :json
+    assert_response :success
+  end
 
   #test "should create invitation" do
   #  assert_difference('Invitation.count') do

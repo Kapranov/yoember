@@ -1,27 +1,34 @@
-require "test_helper"
+require 'test_helper'
+require 'json'
 
-describe ErrorsController do
-  before(:all) do
-    Rails.application.config.action_dispatch.show_exceptions = true
-    Rails.application.config.consider_all_requests_local = false
+class ErrorsControllerTest < ActionController::TestCase
+  test "#404 page" do
+    get :not_found
+    assert_response :success
+    assert_equal response.content_type, 'application/vnd.api+json'
+    jdata = JSON.parse response.body
+    assert_equal ["Not Found"], jdata['errors']
+    assert_equal ' © 2017 LugaTeX - TEST Project Public License (LPPL).', jdata['meta']['copyright']
+    assert_equal 'CC-0', jdata['meta']['licence']
   end
 
-  after(:all) do
-    Rails.application.config.action_dispatch.show_exceptions = false
-    Rails.application.config.consider_all_requests_local = true
+  test "#422 page" do
+    get :unacceptable
+    assert_response :success
+    assert_equal response.content_type, 'application/vnd.api+json'
+    jdata = JSON.parse response.body
+    assert_equal ["Unprocessable Entity"], jdata['errors']
+    assert_equal ' © 2017 LugaTeX - TEST Project Public License (LPPL).', jdata['meta']['copyright']
+    assert_equal 'CC-0', jdata['meta']['licence']
   end
 
-  describe "404 page" do
-    it { must_respond_with :success }
-    # page.status_code.must_equal 404
-    # page.must_have_content 'Not Found'
-  end
-
-  describe "422 page" do
-    it { must_respond_with :success }
-  end
-
-  describe "500 page" do
-    it { must_respond_with :success }
+  test "#500 page" do
+    get :internal_server_error
+    assert_response :success
+    assert_equal response.content_type, 'application/vnd.api+json'
+    jdata = JSON.parse response.body
+    assert_equal ["Internal Server Error"], jdata['errors']
+    assert_equal ' © 2017 LugaTeX - TEST Project Public License (LPPL).', jdata['meta']['copyright']
+    assert_equal 'CC-0', jdata['meta']['licence']
   end
 end

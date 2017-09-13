@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="LibraryTest" skipped="0" failures="0" errors="0" tests="1" assertions="1" time="0.14898476700182073">
+  <testcase name="test_the_truth" classname="LibraryTest" assertions="1" time="0.14898476700182073">
+  </testcase>
+</testsuite>
