@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="ErrorsControllerTest" skipped="0" failures="0" errors="0" tests="3" assertions="15" time="0.009791916003450751">
-  <testcase name="test_#422_page" classname="ErrorsControllerTest" assertions="5" time="0.005193656001210911">
+<testsuite name="ErrorsControllerTest" skipped="0" failures="0" errors="0" tests="3" assertions="15" time="0.013038521999988006">
+  <testcase name="test_#404_page" classname="ErrorsControllerTest" assertions="5" time="0.005541722999623744">
   </testcase>
-  <testcase name="test_#404_page" classname="ErrorsControllerTest" assertions="5" time="0.0023720450008113403">
+  <testcase name="test_#422_page" classname="ErrorsControllerTest" assertions="5" time="0.003590918000554666">
   </testcase>
-  <testcase name="test_#500_page" classname="ErrorsControllerTest" assertions="5" time="0.0022262150014285">
+  <testcase name="test_#500_page" classname="ErrorsControllerTest" assertions="5" time="0.0039058809998095967">
   </testcase>
 </testsuite>

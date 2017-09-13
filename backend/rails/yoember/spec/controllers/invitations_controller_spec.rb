@@ -15,7 +15,7 @@ RSpec.describe InvitationsController, type: :controller do
 
   describe "GET #index" do
     it "returns a successful 200 response" do
-      get :index, :format => 'json'
+      get :index, format: :json
       expect_json_types(data: :array)
       expect_status :ok
       expect(response).to be_success
