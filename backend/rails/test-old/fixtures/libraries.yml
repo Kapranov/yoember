@@ -1,8 +1,0 @@
-<% 9.times do |i| %>
-  library_<%= i %>:
-    name: <%= "Library Nr#{i}" %>
-    address: <%= Faker::Address.city + ' ' + Faker::Address.street_address + ' ' + Faker::Address.secondary_address %>
-    phone: <%= Faker::PhoneNumber.subscriber_number(10) %>
-    created_at: <%= i == 9 ? 1.hour.ago : Time.now %>
-    updated_at: <%= i == 5 ? 1.hour.ago : Time.now %>
-<% end %>
