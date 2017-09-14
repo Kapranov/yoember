@@ -39,7 +39,7 @@ RSpec.describe InvitationsController, type: :controller do
       get :show, params: { id: invitation.id }
     end
 
-    it "returns the information about a reporter on a hash" do
+    it "returns the information email on a hash" do
       expect(json_response[:email]).eql?(invitation.email)
     end
 
@@ -53,19 +53,19 @@ RSpec.describe InvitationsController, type: :controller do
     end
   end
 
-  describe "with valid params" do
-    it "creates a new invitation" do
-      #expect {
-      #  post :create, {:ttt => valid_attributes}
-      #}.to change(Invitation, :count).by(1)
-      #expect { post :create, :invitation => ttt_params }.to change(Invitation, :count).by(1)
-    end
-    #it "assigns a newly created invitation as @invitation" do
-    #  post :create, {:invitation => valid_attributes}
-    #  expect(assigns(:invitation)).to be_a(Invitation)
-    #  expect(assigns(:invitation)).to be_persisted
-    #end
-  end
+  #describe "with valid params" do
+  #  it "creates a new invitation" do
+  #    expect {
+  #      post :create, {:ttt => valid_attributes}
+  #    }.to change(Invitation, :count).by(1)
+  #    expect { post :create, :invitation => ttt_params }.to change(Invitation, :count).by(1)
+  #  end
+  #  it "assigns a newly created invitation as @invitation" do
+  #    post :create, {:invitation => valid_attributes}
+  #    expect(assigns(:invitation)).to be_a(Invitation)
+  #    expect(assigns(:invitation)).to be_persisted
+  #  end
+  #end
 
   #describe "with invalid params" do
   #  it "assigns a newly created but unsaved invitation as @invitation" do
@@ -79,23 +79,22 @@ RSpec.describe InvitationsController, type: :controller do
   #    @invitation = FactoryGirl.create :invitation
   #    delete :destroy, params: { id: @invitation.id }
   #  end
-
   #  it { should respond_with 204 }
-
   #end
-  describe 'DELETE #destroy' do
-    before(:each) do
-      #delete :destroy, params: { id: invitation.id }
-    end
 
-    it 'is successful' do
-      #expect(response).to be_successful
-    end
+  #describe 'DELETE #destroy' do
+  #  before(:each) do
+  #    delete :destroy, params: { id: invitation.id }
+  #  end
 
-    it 'renders no response body' do
-      #expect(response.body).to be_empty
-    end
-  end
+  #  it 'is successful' do
+  #    expect(response).to be_successful
+  #  end
+
+  #  it 'renders no response body' do
+  #    #expect(response.body).to be_empty
+  #  end
+  #end
 
   context "when request sets accept => application/json" do
     it "should return successful response" do

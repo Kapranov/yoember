@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "data": {
+    "type": "object",
+    "required": ["library"],
+    "properties": {
+      "invitation": {
+        "type" : "object",
+        "required" : [
+          "id",
+          "name",
+          "address",
+          "phone"
+        ],
+        "properties" : {
+          "id" : { "type" : "integer" },
+          "name" : { "type" : "string" },
+          "address" : { "type" : "string" },
+          "phone" : { "type" : "string" },
+          "created_at" : { "type" : "string", "format": "date-time" },
+          "updated_at" : { "type" : "string", "format": "date-time" }
+        }
+      }
+    }
+  }
+}
+

@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class InvitationsIntegrationControllerTest < ActionDispatch::IntegrationTest
-  #setup { @invitation = invitations(:one) }
 
   def setup
     @invitation = Invitation.new

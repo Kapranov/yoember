@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="LibrariesControllerTest" skipped="0" failures="0" errors="0" tests="10" assertions="39" time="0.08396094401177834">
-  <testcase name="test_Creating_new_library_with_invalid_data_should_result_in_error" classname="LibrariesControllerTest" assertions="4" time="0.016678157000569627">
+<testsuite name="LibrariesControllerTest" skipped="0" failures="0" errors="0" tests="10" assertions="39" time="0.09003243900042435">
+  <testcase name="test_Should_get_valid_user_data" classname="LibrariesControllerTest" assertions="6" time="0.023752382000111538">
   </testcase>
-  <testcase name="test_Should_get_valid_user_data" classname="LibrariesControllerTest" assertions="6" time="0.008122559000184992">
+  <testcase name="test_Updating_an_existing_library_with_valid_data_should_update_that_library" classname="LibrariesControllerTest" assertions="6" time="0.009958773000107612">
   </testcase>
-  <testcase name="test_Creating_new_library_without_sending_correct_content-type_should_result_in_error" classname="LibrariesControllerTest" assertions="1" time="0.0022115940009825863">
+  <testcase name="test_Creating_new_library_with_invalid_type_in_JSON_data_should_result_in_error" classname="LibrariesControllerTest" assertions="1" time="0.00814828700004">
   </testcase>
-  <testcase name="test_Should_get_JSON:API_error_block_when_requesting_library_data_with_invalid_ID" classname="LibrariesControllerTest" assertions="4" time="0.002764533001027303">
+  <testcase name="test_Should_delete_library" classname="LibrariesControllerTest" assertions="5" time="0.010576519999631273">
   </testcase>
-  <testcase name="test_Should_get_properly_sorted_list" classname="LibrariesControllerTest" assertions="1" time="0.00168701100119506">
+  <testcase name="test_Should_get_properly_sorted_list" classname="LibrariesControllerTest" assertions="1" time="0.002034065000316332">
   </testcase>
-  <testcase name="test_Creating_new_library_with_invalid_type_in_JSON_data_should_result_in_error" classname="LibrariesControllerTest" assertions="1" time="0.006039990003046114">
+  <testcase name="test_Creating_new_library_with_invalid_data_should_result_in_error" classname="LibrariesControllerTest" assertions="4" time="0.006587690000287694">
   </testcase>
-  <testcase name="test_Creating_new_library_with_valid_data_should_create_new_library" classname="LibrariesControllerTest" assertions="6" time="0.007929284998681396">
+  <testcase name="test_Creating_new_library_with_valid_data_should_create_new_library" classname="LibrariesControllerTest" assertions="6" time="0.010997290999966935">
   </testcase>
-  <testcase name="test_Should_delete_library" classname="LibrariesControllerTest" assertions="5" time="0.009970407001674175">
+  <testcase name="test_Should_get_JSON:API_error_block_when_requesting_library_data_with_invalid_ID" classname="LibrariesControllerTest" assertions="4" time="0.002569519000189757">
   </testcase>
-  <testcase name="test_Updating_an_existing_library_with_valid_data_should_update_that_library" classname="LibrariesControllerTest" assertions="6" time="0.014168395002343459">
+  <testcase name="test_Should_get_valid_list_of_libraries" classname="LibrariesControllerTest" assertions="5" time="0.012453907999770308">
   </testcase>
-  <testcase name="test_Should_get_valid_list_of_libraries" classname="LibrariesControllerTest" assertions="5" time="0.014389013002073625">
+  <testcase name="test_Creating_new_library_without_sending_correct_content-type_should_result_in_error" classname="LibrariesControllerTest" assertions="1" time="0.0029540040000028966">
   </testcase>
 </testsuite>
