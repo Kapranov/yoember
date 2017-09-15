@@ -464,7 +464,6 @@ We have to show the response message. Extend your template.
   <br/><br/>
 </div>
 ```
-
 We use the `{{#if}}{{/if}}` handlebar helper block to show or hide the
 alert message. Handlebar conditionals are really powerful. You can use
 `{{else}}` as well.
@@ -486,10 +485,71 @@ alert message. Handlebar conditionals are really powerful. You can use
   soon".
 
 
+### Models
+
+The model detailed introduction on [Ember.js Models][12]
+
 ```
-ember g model contact
+ember g model contact email:string message:string
+ember g model invitation email:string
+```
+Update `app/controllers/index.js` controller action. Instead of showing
+a useless alert message, we try to save our data.
+
+```
+// app/controllers/index.js
+import Ember from 'ember';
+
+export default Ember.Controller.extend({
+  headerMessage: 'Coming Soon',
+  responseMessage: '',
+  emailAddress: '',
+
+  isValid: Ember.computed.match('emailAddress', /^.+@.+\..+$/),
+  isDisabled: Ember.computed.not('isValid'),
+
+  actions: {
+    saveInvitation() {
+      const email = this.get('emailAddress');
+      const newInvitation = this.store.createRecord('invitation', { email: email });
+      newInvitation.save();
+
+      this.set('responseMessage', `Thank you! We have just saved your email address: ${this.get('emailAddress')}`);
+      this.set('emailAddress', '');
+    }
+  }
+});
 ```
 
+Open the app in the browser, and open the browser’s console.
+Try to save an invitation email address on the home page.
+You will see an error message in the console.
+
+Ember.js tried to send that data to a server, but we don’t have a server
+yet. Let’s build one.
+
+**Setup a server on Ruby on Rails vs. Elixir/Phoenix**
+
+Please see directory ``yoember/tree/master/backend``
+
+We can configure the URL of your backend inside the application
+[adapter][13]. So run:
+
+```
+ember generate adapter application
+```
+
+to generate it and make it look like this:
+
+```
+// app/adapters/application.js
+export default DS.ActiveModelAdapter.extend({
+  host: 'http://localhost:3000'
+});
+```
+
+As you will probably know, this is the URL of your running Rails or
+Phoenix dev server. ;)
 
 [1]: http://www.ember-cli.com
 [2]: http://localhost:4200
@@ -502,12 +562,5 @@ ember g model contact
 [9]: http://guides.emberjs.com/v2.15.0/object-model/computed-properties/
 [10]: http://guides.emberjs.com/v2.15.0/object-model/observers/
 [11]: http://emberjs.com/api/classes/Ember.computed.html
-[12]:
-[13]:
-[14]:
-[15]:
-[16]:
-[17]:
-[18]:
-[19]:
-[20]:
+[12]: http://guides.emberjs.com/v2.15.0/models/
+[13]: https://emberjs.com/api/ember-data/2.14.10/classes/DS.Adapter
