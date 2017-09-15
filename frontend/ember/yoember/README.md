@@ -45,7 +45,7 @@ echo '<h1>Welcome to Ember</h1>' > app/templates/application.hbs
 ### Turn on a few debugging options
 
 ```
-# config/environment.js
+// config/environment.js
 //..
 if (environment === 'development') {
   // ENV.APP.LOG_RESOLVER = true;
@@ -78,5 +78,259 @@ echo '@import "bootstrap";' > app/styles/app.scss
 
 ### Create a navigation partial
 
-[1]: http://www.emberaddons.com
+We will use bootstrap navigation bar to create a nice header section for
+our app.
+
+```
+// app/templates/application.hbs
+
+<div class="container">
+  {{partial 'navbar'}}
+  {{outlet}}
+</div>
+```
+
+```
+ember generate template navbar
+
+// app/templates/navbar.hbs
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      {{#link-to 'index' class="navbar-brand"}}Library App{{/link-to}}
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav">
+        {{#link-to 'index' tagName="li"}}<a href="">Home</a>{{/link-to}}
+      </ul>
+    </div>
+  </div>
+</nav>
+```
+
+You can update your `app.scss` file to add some extra padding to the
+top.
+
+```
+@import "bootstrap";
+
+body {
+  padding-top: 20px;
+}
+```
+
+### Create a new About page and add the link to the menu bar
+
+```
+ember generate route about
+ember generate route contact
+ember generate template index
+ember generate template contact
+
+echo '<h1>About Page</h1>'   > app/templates/about.hbs
+echo '<h1>Home Page</h1>'    > app/templates/index.hbs
+echo '<h1>Contact Page</h1>' > app/templates/contact.hbs
+```
+
+Open `app/templates/navbar.hbs` and add the following line to the `ul`
+section under the `Home` link:
+
+```
+// app/templates/navbar.hbs
+
+<ul class="nav navbar-nav">
+  {{#link-to 'index' tagName="li"}}<a href="">Home</a>{{/link-to}}
+  {{#link-to 'about' tagName="li"}}<a href="">About</a>{{/link-to}}
+  {{#link-to 'contact' tagName="li"}}<a href="">Contact</a>{{/link-to}}
+</ul>
+```
+
+### Homepage with an email input box
+
+Let’s create a coming soon “jumbotron” on the home page with an email
+input box, where users can subscribe for a newsletter.
+
+* Bootstrap’s jumbotron
+* Bootstrap’s forms
+
+Add a static jumbotron, an input box and a button to
+`app/templates/index.hbs`:
+
+```
+<div class="jumbotron text-center">
+  <h1>Coming Soon</h1>
+
+  <br/><br/>
+
+  <p>Don't miss our launch date, request an invitation now.</p>
+
+  <div class="form-horizontal form-group form-group-lg row">
+    <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-1 col-md-5 col-md-offset-2">
+      <input type="email" class="form-control" placeholder="Please type your e-mail address." autofocus="autofocus"/>
+    </div>
+    <div class="col-xs-10 col-xs-offset-1 col-sm-offset-0 col-sm-4 col-md-3">
+      <button class="btn btn-primary btn-lg btn-block">Request invitation</button>
+    </div>
+  </div>
+
+  <br/><br/>
+</div>
+```
+
+We would like to cover the following requirements:
+
+* “Invite me” button should be inactive when input box is empty.
+* “Invite me” button should be inactive when the content in the input
+  box is not a valid email address.
+* Show a response message after clicking on “Invite me” button.
+* Clear the input box after invitation has sent.
+
+**isDisabled**
+
+We can add dynamic values to standard html properties using
+conditionals. We can use our controller to add or modify the value of a
+variable, which we use in our template. Check the following solution.
+
+We use a boolean variable, let’s call it `isDisabled`, which will help
+us to turn on and off the `disable` html attribute on our button. We
+have access to these variables in our controllers and in our templates.
+
+From the official guide: "Each template has an associated controller:
+this is where the template finds the properties that it displays. You
+can display a property from your controller by wrapping the property
+name in curly braces."
+
+First, update your `index.hbs` template with this variable.
+Add `disabled` property with `{{isDisabled}}` boolean variable.
+
+```
+ember g controller index
+```
+
+```
+<button disabled={{isDisabled}} class="btn btn-primary btn-lg btn-block">Request invitation</button>
+```
+
+Add `isDisabled` property to the controller. Default value is `true`.
+
+```
+//app/controllers/index.js
+import Ember from 'ember';
+
+export default Ember.Controller.extend({
+  isDisabled: true
+});
+```
+
+If you check app, you will see that the button is disabled by default.
+We want to add some logic around this feature. We have to learn a couple
+of new Ember.js features for that.
+
+**Computed Properties and Observers**
+
+Computed Properties and Observers are important features of Ember.js.
+
+* Computed Properties
+* Observers
+
+Computed properties and observers still could be written in two ways,
+however the classic syntax will be deprecated soon, but it is important
+to know the “old” syntax and the “new” syntax, so when you see older
+project, you will recognise this pattern.
+
+Previously `.property()` and `.observes()` were attached to the end of
+the functions. Nowadays we use `Ember.computed()` and `Ember.observer()`
+functions instead. Let’s see in examples:
+
+```
+// Old (with ES5 string concatenation):
+//...
+
+fullName: function() {
+  return this.get('firstName') + ' ' + this.get('lastName');
+}.property('firstName', 'lastName')
+//...
+```
+
+New (with ES6 string interpolation, which uses back-tick, dollar sign
+and curly braces):
+
+```
+//...
+fullName: Ember.computed('firstName', 'lastName', function() {
+  return `${this.get('firstName')} ${this.get('lastName')}`;
+})
+//...
+```
+
+So, we will use this new syntax. `Ember.computed()` can have more
+parameters. The first parameters are always variables/properties in
+string format; what we would like to use inside our function.
+The last parameter is a `function()`. Inside this function we will have
+access to the properties with `this.get()`.
+In Ember.js we read properties with `this.get('propertyName')` and
+update properties with `this.set('propertyName', newValue)`.
+
+Let’s update our html code with input component syntax and add a `value`
+to our email input box.
+
+Modify `<input>` line as follow in `index.hbs`:
+
+```
+{{input type="email" value=emailAddress class="form-control" placeholder="Please type your e-mail address." autofocus="autofocus"}}
+```
+
+As you can see, we use the `emailAddress` variable, or in other words,
+a "property" where we would like to store the value of the input box.
+
+If you type something in the input box, it will update this variable in
+the controller as well.
+
+You can use the following code in your controller to demonstrate the
+differences between computed properties and observers:
+
+```
+//app/controllers/index.js
+import Ember from 'ember';
+
+export default Ember.Controller.extend({
+  isDisabled: true,
+
+  emailAddress: '',
+
+  actualEmailAddress: Ember.computed('emailAddress', function() {
+    console.log('actualEmailAddress function is called: ', this.get('emailAddress'));
+  }),
+
+  emailAddressChanged: Ember.observer('emailAddress', function() {
+    console.log('observer is called', this.get('emailAddress'));
+  })
+});
+```
+
+Observers will always be called when the value of the `emailAddress`
+changes, while the computed property only changes when you go and use
+that property. Open app in your browser, and activate Ember Inspector.
+Click on `/# Routes` section, find the `index` route, and in the same
+line, under the `Controller` column, you will see an `>$E` sign; click
+on it. Open the console in Chrome and you will see something like this:
+`Ember Inspector ($E): Class {__nextSuper: undefined, __ember_meta__:
+Object, __ember1442491471913: "ember443"}`
+
+If you type the following in the console:
+`$E.get('actualEmailAddress')`, you should see the console.log output
+message defined above inside “actualEmailAddress”. You can try out
+`$E.set('emailAddress', 'example@example.com')`  in the console.
+
+
+
+
+
 [2]: http://www.emberobserver.com
