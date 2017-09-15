@@ -1,4 +1,4 @@
-## Building a complex web application with Ember.js 2.14
+## Building a complex web application with Ember.js 2.15
 
 This application uses the latest Ember CLI tool (v2.15.1).
 
@@ -469,17 +469,16 @@ We use the `{{#if}}{{/if}}` handlebar helper block to show or hide the
 alert message. Handlebar conditionals are really powerful. You can use
 `{{else}}` as well.
 
-* [More about conditionals in templates][11]
+* [More about conditionals in templates][3]
 
 [1]: http://www.ember-cli.com
 [2]: http://localhost:4200
 [3]: http://www.emberaddons.com
 [4]: http://www.emberobserver.com
-[3]: http://guides.emberjs.com/v2.14.0/templates/conditionals/
+[3]: http://guides.emberjs.com/v2.15.0/templates/conditionals/
 [5]: http://getbootstrap.com/components/#jumbotron
 [6]: http://getbootstrap.com/css/#forms
 [7]: http://guides.emberjs.com/v2.15.0/controllers/
 [8]: http://guides.emberjs.com/v2.15.0/object-model/computed-properties/
 [9]: http://guides.emberjs.com/v2.15.0/object-model/observers/
 [10]: http://emberjs.com/api/classes/Ember.computed.html
-[11]: http://guides.emberjs.com/v2.14.0/templates/conditionals/
