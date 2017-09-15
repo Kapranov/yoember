@@ -469,7 +469,7 @@ We use the `{{#if}}{{/if}}` handlebar helper block to show or hide the
 alert message. Handlebar conditionals are really powerful. You can use
 `{{else}}` as well.
 
-[More about conditionals in templates][5]
+[More about conditionals in templates]:[5]
 
 **Contact page**
 
@@ -489,6 +489,7 @@ alert message. Handlebar conditionals are really powerful. You can use
 ```
 ember g model contact
 ```
+
 
 [1]: http://www.ember-cli.com
 [2]: http://localhost:4200
