@@ -164,8 +164,8 @@ section under the `Home` link:
 Let’s create a coming soon “jumbotron” on the home page with an email
 input box, where users can subscribe for a newsletter.
 
-* [Bootstrap’s jumbotron][5]
-* [Bootstrap’s forms][6]
+* [Bootstrap’s jumbotron][6]
+* [Bootstrap’s forms][7]
 
 **Static html5 and style**
 
@@ -223,7 +223,7 @@ Add `disabled` property with `{{isDisabled}}` boolean variable.
 ember g controller index
 ```
 
-[Read more about Ember controllers][7]
+[Read more about Ember controllers][8]
 
 ```
 <button disabled={{isDisabled}} class="btn btn-primary btn-lg btn-block">Request invitation</button>
@@ -248,8 +248,8 @@ of new Ember.js features for that.
 
 Computed Properties and Observers are important features of Ember.js.
 
-* [Computed Properties][8]
-* [Observers][9]
+* [Computed Properties][9]
+* [Observers][10]
 
 Computed properties and observers still could be written in two ways,
 however the classic syntax will be deprecated soon, but it is important
@@ -371,7 +371,7 @@ export default Ember.Controller.extend({
 });
 ```
 
-* More about `Ember.computed` short syntax: [Check all the methods][10]
+More about `Ember.computed` short syntax: [Check all the methods][11]
 
 **isValid**
 
@@ -469,16 +469,16 @@ We use the `{{#if}}{{/if}}` handlebar helper block to show or hide the
 alert message. Handlebar conditionals are really powerful. You can use
 `{{else}}` as well.
 
-* [More about conditionals in templates][3]
+[More about conditionals in templates][5]
 
 [1]: http://www.ember-cli.com
 [2]: http://localhost:4200
 [3]: http://www.emberaddons.com
 [4]: http://www.emberobserver.com
-[3]: http://guides.emberjs.com/v2.15.0/templates/conditionals/
-[5]: http://getbootstrap.com/components/#jumbotron
-[6]: http://getbootstrap.com/css/#forms
-[7]: http://guides.emberjs.com/v2.15.0/controllers/
-[8]: http://guides.emberjs.com/v2.15.0/object-model/computed-properties/
-[9]: http://guides.emberjs.com/v2.15.0/object-model/observers/
-[10]: http://emberjs.com/api/classes/Ember.computed.html
+[5]: http://guides.emberjs.com/v2.15.0/templates/conditionals/
+[6]: http://getbootstrap.com/components/#jumbotron
+[7]: http://getbootstrap.com/css/#forms
+[8]: http://guides.emberjs.com/v2.15.0/controllers/
+[9]: http://guides.emberjs.com/v2.15.0/object-model/computed-properties/
+[10]: http://guides.emberjs.com/v2.15.0/object-model/observers/
+[11]: http://emberjs.com/api/classes/Ember.computed.html
