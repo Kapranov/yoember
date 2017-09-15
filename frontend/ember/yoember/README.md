@@ -32,12 +32,19 @@ ember-cli: 2.15.1
 node: 8.2.1
 os: linux x64
 ```
+
+[Read more about Ember CLI here][1]
+
 ### Create the application
 
 ```
 ember new yoember
 ember server
+```
 
+[Open your new empty app in your browser][2]
+
+```
 ember generate template application
 echo '<h1>Welcome to Ember</h1>' > app/templates/application.hbs
 ```
@@ -64,8 +71,8 @@ extra information about what Ember.js actually does under the hood.
 We use Bootstrap with Sass. Ember CLI can install for us add-ons and
 useful packages. These add-ons simplify our development process, because
 we don’t have to reinvent the wheel, we get more out of the box. You can
-find various packages, add-ons on these websites: [emberaddons][1],
-[emberobserver][2].
+find various packages, add-ons on these websites: [emberaddons][3],
+[emberobserver][4].
 
 ```
 ember install ember-cli-sass
@@ -157,8 +164,10 @@ section under the `Home` link:
 Let’s create a coming soon “jumbotron” on the home page with an email
 input box, where users can subscribe for a newsletter.
 
-* Bootstrap’s jumbotron
-* Bootstrap’s forms
+* [Bootstrap’s jumbotron][5]
+* [Bootstrap’s forms][6]
+
+**Static html5 and style**
 
 Add a static jumbotron, an input box and a button to
 `app/templates/index.hbs`:
@@ -214,6 +223,8 @@ Add `disabled` property with `{{isDisabled}}` boolean variable.
 ember g controller index
 ```
 
+[Read more about Ember controllers][7]
+
 ```
 <button disabled={{isDisabled}} class="btn btn-primary btn-lg btn-block">Request invitation</button>
 ```
@@ -237,8 +248,8 @@ of new Ember.js features for that.
 
 Computed Properties and Observers are important features of Ember.js.
 
-* Computed Properties
-* Observers
+* [Computed Properties][8]
+* [Observers][9]
 
 Computed properties and observers still could be written in two ways,
 however the classic syntax will be deprecated soon, but it is important
@@ -252,7 +263,6 @@ functions instead. Let’s see in examples:
 ```
 // Old (with ES5 string concatenation):
 //...
-
 fullName: function() {
   return this.get('firstName') + ' ' + this.get('lastName');
 }.property('firstName', 'lastName')
@@ -329,8 +339,147 @@ If you type the following in the console:
 message defined above inside “actualEmailAddress”. You can try out
 `$E.set('emailAddress', 'example@example.com')`  in the console.
 
+**isDisabled with Computed Property**
 
+We can rewrite our `isDisabled` with computed property as well.
 
+```
+// app/controllers/index.js
+import Ember from 'ember';
 
+export default Ember.Controller.extend({
+  emailAddress: '',
 
-[2]: http://www.emberobserver.com
+  isDisabled: Ember.computed('emailAddress', function() {
+    return this.get('emailAddress') === '';
+  })
+});
+```
+
+There are a few predefined computed property functions, which saves you
+some code. In the following example we use `Ember.computed.empty()`,
+which checks whether a property is empty or not.
+
+```
+// app/controllers/index.js
+import Ember from 'ember';
+
+export default Ember.Controller.extend({
+  emailAddress: '',
+
+  isDisabled: Ember.computed.empty('emailAddress')
+});
+```
+
+* More about `Ember.computed` short syntax: [Check all the methods][10]
+
+**isValid**
+
+Let’s go further. It would be a more elegant solution if we only enabled
+our “Request Invitation” button when the input box contained a valid
+email address. We’ll use the `Ember.computed.match()` short computed
+property function to check the validity of the string. But `isDisabled`
+needs to be the negated version of this `isValid` computed property. We
+can use the `Ember.computed.not()` for this:
+
+```
+// app/controllers/index.js
+import Ember from 'ember';
+
+export default Ember.Controller.extend({
+  emailAddress: '',
+
+  isValid: Ember.computed.match('emailAddress', /^.+@.+\..+$/),
+  isDisabled: Ember.computed.not('isValid')
+
+});
+```
+
+Great, it works now as expected. You see, we can write really elegant
+code with Ember.js, can’t we? ;)
+
+**Adding Actions**
+
+Great we have an input box and a button on our screen, but it does
+nothing at the moment. Let’s implement our first action.
+
+Update the `<button>` line in `index.hbs` to read like this.
+
+```
+<button class="btn btn-primary btn-lg btn-block" disabled={{isDisabled}} {{action 'saveInvitation'}}>Request invitation</button>
+```
+
+You can try it out in browser and see that if you click on the button,
+you will get a nice error message, alerting you that you have to
+implement this action in your controller. Let’s do that.
+
+```
+// app/controllers/index.js
+import Ember from 'ember';
+
+export default Ember.Controller.extend({
+  emailAddress: '',
+
+  isValid: Ember.computed.match('emailAddress', /^.+@.+\..+$/),
+  isDisabled: Ember.computed.not('isValid'),
+
+  actions: {
+    saveInvitation() {
+      alert(`Saving of the following email address is in progress: ${this.get('emailAddress')}`);
+      this.set('responseMessage', `Thank you! We've just saved your email address: ${this.get('emailAddress')}`);
+      this.set('emailAddress', '');
+    }
+  }
+});
+```
+
+If click on the button, the `saveInvitation` action is called and shows
+an alert box, sets up a `responseMessage` property, and finally deletes
+the content of emailAddress`.
+
+We have to show the response message. Extend your template.
+
+```
+<!-- app/templates/index.hbs -->
+<div class="jumbotron text-center">
+  <h1>Coming Soon</h1>
+
+  <br/><br/>
+
+  <p>Don't miss our launch date, request an invitation now.</p>
+
+  <div class="form-horizontal form-group form-group-lg row">
+    <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-1 col-md-5 col-md-offset-2">
+      {{input type="email" value=emailAddress class="form-control" placeholder="Please type your e-mail address." autofocus="autofocus"}}
+    </div>
+    <div class="col-xs-10 col-xs-offset-1 col-sm-offset-0 col-sm-4 col-md-3">
+      <button class="btn btn-primary btn-lg btn-block" {{action 'saveInvitation'}} disabled={{isDisabled}}>Request invitation</button>
+    </div>
+  </div>
+
+  {{#if responseMessage}}
+    <div class="alert alert-success">{{responseMessage}}</div>
+  {{/if}}
+
+  <br/><br/>
+</div>
+```
+
+We use the `{{#if}}{{/if}}` handlebar helper block to show or hide the
+alert message. Handlebar conditionals are really powerful. You can use
+`{{else}}` as well.
+
+* [More about conditionals in templates][11]
+
+[1]: http://www.ember-cli.com
+[2]: http://localhost:4200
+[3]: http://www.emberaddons.com
+[4]: http://www.emberobserver.com
+[3]: http://guides.emberjs.com/v2.14.0/templates/conditionals/
+[5]: http://getbootstrap.com/components/#jumbotron
+[6]: http://getbootstrap.com/css/#forms
+[7]: http://guides.emberjs.com/v2.15.0/controllers/
+[8]: http://guides.emberjs.com/v2.15.0/object-model/computed-properties/
+[9]: http://guides.emberjs.com/v2.15.0/object-model/observers/
+[10]: http://emberjs.com/api/classes/Ember.computed.html
+[11]: http://guides.emberjs.com/v2.14.0/templates/conditionals/
