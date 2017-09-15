@@ -8,7 +8,9 @@ module.exports = function(environment) {
     rootURL: '/',
     locationType: 'auto',
     contentSecurityPolicy: {
-      'script-src': "'self' 'unsafe-eval' api.dev.local:3000"
+      'style-src': "'self' 'unsafe-inline'",
+      'script-src': "'self' 'unsafe-eval' 127.0.0.1:35729",
+      'connect-src': "'self' http://localhost:3000 http://127.0.0.1:3000",
     },
     EmberENV: {
       FEATURES: {

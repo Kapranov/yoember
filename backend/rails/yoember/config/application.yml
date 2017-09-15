@@ -1,10 +1,10 @@
 general: &general
   PORT:                 '3000'
-  CORS:                 '127.0.0.1:3000'
-  LOCALHOST:            '127.0.0.1'
+  CORS:                 'api.dev.local:3000'
+  LOCALHOST:            'api.dev.local'
   DOMAIN_NAME:          'api.dev.local'
   DOMAIN_NAME_PORT:     'api.dev.local:3000'
-  RACK_CORS_ORIGINS:    'localhost:4200'
+  RACK_CORS_ORIGINS:    'api.dev.local:4200'
 
 redis: &redis
   REDIS_URL:            'redis://localhost:6379/0'

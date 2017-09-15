@@ -551,6 +551,16 @@ export default DS.ActiveModelAdapter.extend({
 As you will probably know, this is the URL of your running Rails or
 Phoenix dev server. ;)
 
+
+**Run Server**
+
+```
+# start up backend
+bundle exec rails s -b api.dev.local
+# start up frontend
+ember server --proxy "http://api.dev.local:3000"
+```
+
 [1]: http://www.ember-cli.com
 [2]: http://localhost:4200
 [3]: http://www.emberaddons.com
