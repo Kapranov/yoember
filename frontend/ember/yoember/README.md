@@ -625,29 +625,6 @@ EmberENV: {
 
 ```
 
-### Check out and edit route `app/router.js`:
-
-```
-// app/router.js
-import Ember from 'ember';
-import config from './config/environment';
-
-const Router = Ember.Router.extend({
-  location: config.locationType
-});
-
-Router.map(function() {
-  this.route('about');
-  this.route('contact');
-
-  this.route('admin', function() {
-    this.route('invitations');
-  });
-});
-
-export default Router;
-```
-
 ### Create an Admin page
 
 We would like to list out from the database the persisted email
@@ -740,6 +717,30 @@ export default Ember.Route.extend({
 });
 
 ```
+
+**Check out and edit route**
+
+```
+// app/router.js
+import Ember from 'ember';
+import config from './config/environment';
+
+const Router = Ember.Router.extend({
+  location: config.locationType
+});
+
+Router.map(function() {
+  this.route('about');
+  this.route('contact');
+
+  this.route('admin', function() {
+    this.route('invitations');
+  });
+});
+
+export default Router;
+```
+
 Launch your app and check your table in Admin.
 
 **Run Server's**
