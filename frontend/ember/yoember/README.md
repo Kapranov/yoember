@@ -484,7 +484,6 @@ alert message. Handlebar conditionals are really powerful. You can use
   could be something like, "We got your message and we’ll get in touch
   soon".
 
-
 ### Models
 
 The model detailed introduction on [Ember.js Models][12]
@@ -492,7 +491,49 @@ The model detailed introduction on [Ember.js Models][12]
 ```
 ember g model contact email:string message:string
 ember g model invitation email:string
+ember g model library name:string address:string phone:string
 ```
+
+```
+// app/models/invitation.js
+import DS from 'ember-data';
+
+export default DS.Model.extend({
+  email: DS.attr('string')
+});
+```
+
+```
+// app/models/library.js
+import DS from 'ember-data';
+import Ember from 'ember';
+
+export default DS.Model.extend({
+  name: DS.attr('string'),
+  address: DS.attr('string'),
+  phone: DS.attr('string'),
+
+  isValid: Ember.computed.notEmpty('name')
+});
+```
+
+```
+// app/models/contact.js
+import DS from 'ember-data';
+import Ember from 'ember';
+
+export default DS.Model.extend({
+  email: DS.attr('string'),
+  message: DS.attr('string'),
+
+  isValidEmail: Ember.computed.match('email', /^.+@.+\..+$/),
+  isMessageEnoughLong: Ember.computed.gte('message.length', 5),
+
+  isValid: Ember.computed.and('isValidEmail', 'isMessageEnoughLong'),
+  isNotValid: Ember.computed.not('isValid')
+});
+```
+
 Update `app/controllers/index.js` controller action. Instead of showing
 a useless alert message, we try to save our data.
 
@@ -582,6 +623,29 @@ contentSecurityPolicy: {
 EmberENV: {
 /...
 
+```
+
+Edit route `app/router.js`:
+
+```
+// app/router.js
+import Ember from 'ember';
+import config from './config/environment';
+
+const Router = Ember.Router.extend({
+  location: config.locationType
+});
+
+Router.map(function() {
+  this.route('about');
+  this.route('contact');
+
+  this.route('admin', function() {
+    this.route('invitations');
+  });
+});
+
+export default Router;
 ```
 
 ### Create an Admin page
@@ -678,8 +742,6 @@ export default Ember.Route.extend({
 ```
 Launch your app and check your table in Admin.
 
-### CRUD interface for libraries
-
 **Run Server's**
 
 As you will probably know, this is the URL of your running Rails or
@@ -691,6 +753,8 @@ bundle exec rails s -b api.dev.local
 # start up frontend
 ember server --proxy "http://api.dev.local:3000"
 ```
+
+### CRUD interface for libraries
 
 [1]: http://www.ember-cli.com
 [2]: http://localhost:4200
