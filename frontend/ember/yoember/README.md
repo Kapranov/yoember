@@ -757,6 +757,369 @@ ember server --proxy "http://api.dev.local:3000"
 
 ### CRUD interface for libraries
 
+We create our new route. At the moment we’ll do it without Ember CLI;
+just manually add the following lines to our `router.js`:
+
+```
+// app/router.js
+import Ember from 'ember';
+import config from './config/environment';
+
+const Router = Ember.Router.extend({
+  location: config.locationType
+});
+
+Router.map(function() {
+  this.route('about');
+  this.route('contact');
+
+  this.route('admin', function() {
+    this.route('invitations');
+  });
+
+  this.route('libraries', function() {
+    this.route('new');
+    this.route('edit', { path: '/:library_id/edit' });
+  });
+});
+
+export default Router;
+```
+
+Now we create 3 new templates. Our main `libraries.hbs`, a
+`libraries/index.hbs` for displaying the list, and a
+`libraries/new.hbs` for a library creation form.
+
+```
+ember g template libraries
+ember g template libraries/index
+ember g template libraries/new
+ember g template libraries/form
+ember g template libraries/edit
+```
+
+Update your `navbar.hbs` main navigation section as follows:
+
+```
+<!-- app/templates/navbar.hbs -->
+<ul class="nav navbar-nav">
+  {{#link-to 'index' tagName="li"}}<a href="">Home</a>{{/link-to}}
+  {{#link-to 'libraries' tagName="li"}}<a href="">Libraries</a>{{/link-to}}
+  {{#link-to 'about' tagName="li"}}<a href="">About</a>{{/link-to}}
+  {{#link-to 'contact' tagName="li"}}<a href="">Contact</a>{{/link-to}}
+</ul>
+```
+
+Add a submenu to `libraries.hbs`:
+
+```
+<!-- app/templates/libraries.hbs -->
+<h1>Libraries</h1>
+
+<div class="well">
+  <ul class="nav nav-pills">
+    {{#link-to 'libraries.index' tagName="li"}}<a href="">List all</a>{{/link-to}}
+    {{#link-to 'libraries.new' tagName="li"}}<a href="">Add new</a>{{/link-to}}
+  </ul>
+</div>
+
+{{outlet}}
+```
+
+Check app; you should see a new menu item, and a submenu with two
+items under `/libraries`.
+
+The other two templates should have the following content.
+
+```
+<!-- app/templates/libraries/index.hbs -->
+<h2>List</h2>
+<div class="row">
+  {{#each model as |library|}}
+    <div class="col-md-4">
+      {{#library-item item=library}}
+        {{#link-to 'libraries.edit' library.id class='btn btn-success btn-xs'}}Edit{{/link-to}}
+        <button class="btn btn-danger btn-xs" {{action 'deleteLibrary' library}}>Delete</button>
+      {{/library-item}}
+    </div>
+  {{/each}}
+</div>
+```
+
+We generate a list from our model which will be retrieved in the route.
+We are using `panel` style from bootstrap here.
+
+```
+<!-- app/templates/libraries/new.hbs -->
+<h2>Add a new local Library</h2>
+
+<div class="row">
+  <div class="col-md-6">
+    {{library-item-form item=model buttonLabel='Add to library list' action='saveLibrary'}}
+  </div>
+  <div class="col-md-4">
+    {{#library-item item=model}}
+      <br/>
+    {{/library-item}}
+  </div>
+</div>
+```
+We use `model` as our value store. You will soon see that our model will
+be created in the route. The action attached to the submit button will
+call a `saveLibrary` function that we’ll pass the `model` parameter to.
+
+Edit `form.hbs` and `edit.hbs`:
+
+```
+<!-- app/templates/libraries/form.hbs -->
+<h2>{{title}}</h2>
+
+<div class="row">
+  <div class="col-md-6">
+    {{library-item-form item=model buttonLabel=buttonLabel action='saveLibrary'}}
+  </div>
+  <div class="col-md-4">
+    {{#library-item item=model}}
+      <br/>
+    {{/library-item}}
+  </div>
+</div>
+```
+
+```
+<!-- app/templates/libraries/edit.hbs -->
+<h2>Edit Library</h2>
+
+<div class="row">
+  <div class="col-md-6">
+    {{library-item-form item=model buttonLabel='Save changes' action='saveLibrary'}}
+  </div>
+  <div class="col-md-4">
+    {{#library-item item=model}}
+      <br/>
+    {{/library-item}}
+  </div>
+</div>
+```
+
+In `app/routes`  folder create `libraries` folder and add two js files:
+`index.js`, `new.js`, 'edit.js':
+
+```
+// app/routes/libraries/index.js
+import Ember from 'ember';
+
+export default Ember.Route.extend({
+  model() {
+    return this.store.findAll('library');
+  },
+
+  actions: {
+    deleteLibrary(library) {
+      let confirmation = confirm('Are you sure?');
+
+      if (confirmation) {
+        library.destroyRecord();
+      }
+    }
+  }
+});
+```
+In the route above, we retrieve all the library records from the server.
+
+```
+// app/routes/libraries/new.js
+import Ember from 'ember';
+
+export default Ember.Route.extend({
+  model: function () {
+    return this.store.createRecord('library');
+  },
+
+  setupController: function (controller, model) {
+    this._super(controller, model);
+
+    controller.set('title', 'Create a new library');
+    controller.set('buttonLabel', 'Create');
+  },
+
+  renderTemplate() {
+    this.render('libraries/form');
+  },
+
+  actions: {
+    saveLibrary(newLibrary) {
+      newLibrary.save().then(() => this.transitionTo('libraries'));
+    },
+
+    willTransition() {
+      let model = this.controller.get('model');
+
+      if (model.get('isNew')) {
+        model.destroyRecord();
+      }
+    }
+  }
+});
+
+```
+
+```
+// app/routes/libraries/edit.js
+import Ember from 'ember';
+
+export default Ember.Route.extend({
+  model(params) {
+    return this.store.findRecord('library', params.library_id);
+  },
+
+  actions: {
+    saveLibrary(newLibrary) {
+      newLibrary.save().then(() => this.transitionTo('libraries'));
+    },
+
+    willTransition(transition) {
+      let model = this.controller.get('model');
+
+      if (model.get('hasDirtyAttributes')) {
+        let confirmation = confirm("Your changes haven't saved yet. Would you like to leave this form?");
+
+        if (confirmation) {
+          model.rollbackAttributes();
+        } else {
+          transition.abort();
+        }
+      }
+    }
+  }
+});
+```
+
+In the above route’s model method, we create a new record and that will
+be the `model`. It automatically appears in the controller and in the
+template. In the `saveLibrary` action we accept a parameter and we save
+that model, and then we send the application back to the Libraries home
+page with `transitionTo`.
+
+There is a built-in Ember.js action (event) called `willTransition` that
+is called when you leave a page (route). In our case, we use this action
+to reset the model if we haven’t saved it in the database yet.
+
+As you can see, we can access the controller from the route handler
+using `this.controller`, however we don’t have a real controller file
+for this route (`/libraries/new.js`). Ember.js’s dynamic code generation
+feature automatically creates controllers and route handlers for each
+route. They exists in memory. In this example, the `model` property
+exists in this “virtual” controller and in our template, so we can still
+“destroy” it.
+
+Open the browser and please check out these automatically generated
+routes and controllers in Ember Inspector, under the “Routes” section.
+You will see how many different elements are dynamically created.
+
+What is that nice one liner in our `saveLibrary()` method?
+
+```
+newLibrary.save().then(() => this.transitionTo('libraries'));
+```
+
+In ES2015, with the `=> syntax`,  if we only have one line of code (like
+`return` + something) we can use a cleaner structure, without curly
+braces and `return`.
+
+In a previous version we had the following code in `willTransition()`.
+
+```
+willTransition() {
+  let model = this.controller.get('model');
+
+  if (model.get('isNew')) {
+    model.destroyRecord();
+  }
+}
+```
+
+We have a simpler solution. Using `rollbackAttributes()` is cleaner.
+It destroys the record automatically if it is new.
+
+### Cleaning up our templates with components
+
+First of all, please read more about [Components][15] in the Ember.js
+Guide:
+
+Let’s create two components. One for the library panel, and one for
+forms.
+
+```
+ember g component library-item
+ember g component library-item-form
+```
+
+We can insert the following code into our `library-item` template:
+
+```
+<!-- app/templates/components/library-item.hbs -->
+<div class="panel panel-default library-item">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{item.name}}</h3>
+  </div>
+  <div class="panel-body">
+    <p>Address: {{item.address}}</p>
+    <p>Phone: {{item.phone}}</p>
+  </div>
+  <div class="panel-footer text-right">
+    {{yield}}
+  </div>
+</div>
+```
+Let’s add html to our `library-item-form` component as well.
+
+```
+<!-- app/templates/components/library-item-form.hbs -->
+<div class="form-horizontal">
+  <div class="form-group has-feedback {{if item.isValid 'has-success'}}">
+    <label class="col-sm-2 control-label">Name*</label>
+    <div class="col-sm-10">
+      {{input type="text" value=item.name class="form-control" placeholder="The name of the Library"}}
+      {{#if item.isValid}}<span class="glyphicon glyphicon-ok form-control-feedback"></span>{{/if}}
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Address</label>
+    <div class="col-sm-10">
+      {{input type="text" value=item.address class="form-control" placeholder="The address of the Library"}}
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Phone</label>
+    <div class="col-sm-10">
+      {{input type="text" value=item.phone class="form-control" placeholder="The phone number of the Library"}}
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default" {{action 'buttonClicked' item}} disabled={{unless item.isValid true}}>{{buttonLabel}}</button>
+    </div>
+  </div>
+</div>
+```
+Add the `buttonClicked` action to `library-item-form.js`:
+
+```
+// app/components/library-item-form.js
+import Ember from 'ember';
+
+export default Ember.Component.extend({
+  buttonLabel: 'Save',
+
+  actions: {
+    buttonClicked(param) {
+      this.sendAction('action', param);
+    }
+  }
+});
+```
+
 [1]: http://www.ember-cli.com
 [2]: http://localhost:4200
 [3]: http://www.emberaddons.com
@@ -771,3 +1134,4 @@ ember server --proxy "http://api.dev.local:3000"
 [12]: http://guides.emberjs.com/v2.15.0/models/
 [13]: https://emberjs.com/api/ember-data/2.14.10/classes/DS.Adapter
 [14]: http://guides.emberjs.com/v2.15.0/routing/specifying-a-routes-model/
+[15]: https://guides.emberjs.com/v2.15.0/components/defining-a-component/
