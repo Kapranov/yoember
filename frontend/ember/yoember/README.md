@@ -741,7 +741,7 @@ Router.map(function() {
 export default Router;
 ```
 
-Launch your app and check your table in Admin.
+*Launch your app and check your table in Admin.*
 
 **Run Server's**
 
