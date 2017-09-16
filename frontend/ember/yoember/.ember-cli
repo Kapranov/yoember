@@ -1,5 +1,7 @@
 {
   "disableAnalytics": false,
+  "liveReload": true,
+  "watcher": "polling",
   "port": 4200,
   "live-reload-port": 9501,
   "host": "api.dev.local"
