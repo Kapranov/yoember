@@ -625,7 +625,7 @@ EmberENV: {
 
 ```
 
-Edit route `app/router.js`:
+### Check out and edit route `app/router.js`:
 
 ```
 // app/router.js
