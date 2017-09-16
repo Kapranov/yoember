@@ -511,11 +511,14 @@ export default Ember.Controller.extend({
   actions: {
     saveInvitation() {
       const email = this.get('emailAddress');
+
       const newInvitation = this.store.createRecord('invitation', { email: email });
       newInvitation.save();
 
-      this.set('responseMessage', `Thank you! We have just saved your email address: ${this.get('emailAddress')}`);
-      this.set('emailAddress', '');
+      newInvitation.save().then((response) => {
+        this.set('responseMessage', `Thank you! We saved your email address with the following id: ${response.get('id')}`);
+        this.set('emailAddress', '');
+      });
     }
   }
 });
@@ -544,15 +547,143 @@ to generate it and make it look like this:
 ```
 // app/adapters/application.js
 export default DS.ActiveModelAdapter.extend({
-  host: 'http://localhost:3000'
 });
 ```
+Edit `app/adapters/application.js`:
+
+```
+// app/adapters/application.js
+import Ember from 'ember';
+import JSONAPIAdapter from 'ember-data/adapters/json-api';
+
+const { String: { pluralize, underscore } } = Ember;
+
+export default JSONAPIAdapter.extend({
+  pathForType(type) {
+    return pluralize(underscore(type));
+  }
+});
+```
+**Content Security Policy (CSP)**
+
+```
+ember install ember-cli-content-security-policy
+```
+
+```
+// config/environment.js
+//...
+locationType: 'auto',
+contentSecurityPolicy: {
+  'style-src': "'self' 'unsafe-inline'",
+  'script-src': "'self' 'unsafe-eval' 127.0.0.1:35729",
+  'connect-src': "'self' http://localhost:3000 http://127.0.0.1:3000",
+},
+EmberENV: {
+/...
+
+```
+
+### Create an Admin page
+
+We would like to list out from the database the persisted email
+addresses. Let’s create a new route and page what we can reach with the
+following url: `http://localhost:4200/admin/invitations`:
+
+```
+ember g route admin/invitations
+```
+
+Add this new page to the `navbar.hbs` with a dropdown.
+
+```
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      {{#link-to 'index' class="navbar-brand"}}Library App{{/link-to}}
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav">
+        {{#link-to 'index' tagName="li"}}<a href="">Home</a>{{/link-to}}
+        {{#link-to 'about' tagName="li"}}<a href="">About</a>{{/link-to}}
+        {{#link-to 'contact' tagName="li"}}<a href="">Contact</a>{{/link-to}}
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin<span
+              class="caret"></span></a>
+          <ul class="dropdown-menu">
+            {{#link-to 'admin.invitations' tagName="li"}}<a href="">Invitations</a>{{/link-to}}
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+```
+Add a table to `app/templates/admin/invitations.hbs`:
+
+```
+<h1>Invitations</h1>
+
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>E-mail</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each model as |invitation|}}
+      <tr>
+        <th>{{invitation.id}}</th>
+        <td>{{invitation.email}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
+```
+
+We use the `{{#each}}{{/each}}` handlebar block helper to generate a
+list. The `model` variable will contain an array of invitations which we
+will retrieve from the server. Ember.js automatically populates
+responses from the server, however we have not implemented this step
+yet.
+
+Let’s retrieve our data from the server using a Route Handler and Ember
+Data.
+
+[The official guide about Route’s Model][14]
+
+Add the following code to your `app/routes/admin/invitations.js` file:
+
+```
+// app/routes/admin/invitations.js
+import Ember from 'ember';
+
+export default Ember.Route.extend({
+  model() {
+    return this.store.findAll('invitation');
+  }
+});
+
+```
+Launch your app and check your table in Admin.
+
+### CRUD interface for libraries
+
+**Run Server's**
 
 As you will probably know, this is the URL of your running Rails or
 Phoenix dev server. ;)
-
-
-**Run Server's**
 
 ```
 # start up backend
@@ -574,3 +705,4 @@ ember server --proxy "http://api.dev.local:3000"
 [11]: http://emberjs.com/api/classes/Ember.computed.html
 [12]: http://guides.emberjs.com/v2.15.0/models/
 [13]: https://emberjs.com/api/ember-data/2.14.10/classes/DS.Adapter
+[14]: http://guides.emberjs.com/v2.15.0/routing/specifying-a-routes-model/
