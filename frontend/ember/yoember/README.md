@@ -494,6 +494,47 @@ alert message. Handlebar conditionals are really powerful. You can use
   could be something like, "We got your message and we’ll get in touch
   soon".
 
+```
+<!-- app/templates/contact.hbs -->
+<h1>Contact Page</h1>
+
+<p class="well well-sm">If you have any question or feedback please leave a message with your email address.</p>
+
+<div class="row">
+  <div class="col-md-6">
+
+    {{#if responseMessage}}
+
+      <br/>
+      <div class="alert alert-success">
+        <h4>Thank you! Your message is sent.</h4>
+        <p>To: {{model.email}}</p>
+        <p>Message: {{model.message}}</p>
+        <p>Reference ID: {{model.id}}</p>
+      </div>
+
+    {{else}}
+
+      <div class="form-group has-feedback {{if model.isValidEmail 'has-success'}}">
+        <label>Your email address*:</label>
+        {{input type="email" class="form-control" placeholder="Your email address" value=model.email autofocus="autofocus"}}
+        {{#if model.isValidEmail}}<span class="glyphicon glyphicon-ok form-control-feedback"></span>{{/if}}
+      </div>
+
+      <div class="form-group has-feedback {{if model.isMessageEnoughLong 'has-success'}}">
+        <label>Your message*:</label>
+        {{textarea class="form-control" placeholder="Your message. (At least 5 characters.)" rows="5" value=model.message}}
+        {{#if model.isMessageEnoughLong}}<span class="glyphicon glyphicon-ok form-control-feedback"></span>{{/if}}
+      </div>
+
+      <button class="btn btn-success" {{action 'sendMessage' model}} disabled={{model.isNotValid}}>Send</button>
+
+    {{/if}}
+
+  </div>
+</div>
+```
+
 ### Models
 
 The model detailed introduction on [Ember.js Models][12]
@@ -573,49 +614,6 @@ export default Ember.Controller.extend({
     }
   }
 });
-```
-
-Templates:
-
-```
-<!-- app/templates/contact.hbs -->
-<h1>Contact Page</h1>
-
-<p class="well well-sm">If you have any question or feedback please leave a message with your email address.</p>
-
-<div class="row">
-  <div class="col-md-6">
-
-    {{#if responseMessage}}
-
-      <br/>
-      <div class="alert alert-success">
-        <h4>Thank you! Your message is sent.</h4>
-        <p>To: {{model.email}}</p>
-        <p>Message: {{model.message}}</p>
-        <p>Reference ID: {{model.id}}</p>
-      </div>
-
-    {{else}}
-
-      <div class="form-group has-feedback {{if model.isValidEmail 'has-success'}}">
-        <label>Your email address*:</label>
-        {{input type="email" class="form-control" placeholder="Your email address" value=model.email autofocus="autofocus"}}
-        {{#if model.isValidEmail}}<span class="glyphicon glyphicon-ok form-control-feedback"></span>{{/if}}
-      </div>
-
-      <div class="form-group has-feedback {{if model.isMessageEnoughLong 'has-success'}}">
-        <label>Your message*:</label>
-        {{textarea class="form-control" placeholder="Your message. (At least 5 characters.)" rows="5" value=model.message}}
-        {{#if model.isMessageEnoughLong}}<span class="glyphicon glyphicon-ok form-control-feedback"></span>{{/if}}
-      </div>
-
-      <button class="btn btn-success" {{action 'sendMessage' model}} disabled={{model.isNotValid}}>Send</button>
-
-    {{/if}}
-
-  </div>
-</div>
 ```
 
 Open the app in the browser, and open the browser’s console.
@@ -1097,6 +1095,230 @@ willTransition() {
 We have a simpler solution. Using `rollbackAttributes()` is cleaner.
 It destroys the record automatically if it is new.
 
+### Add Delete, Edit button and Edit route
+
+**Upgrading the library list view to a grid view**
+
+Let’s upgrade our `app/templates/libraries/index.hbs` to show a nice
+grid layout. We have to tweak our stylesheet a little bit as well. You
+can see below that there are two buttons in `panel-footer`. The first
+button is a link to the Edit screen, and the second is a Delete button
+with the action `deleteLibrary`. We send `library` as a parameter to
+that action.
+
+```
+<!-- app/templates/libraries/index.hbs -->
+<h2>List</h2>
+<div class="row">
+  {{#each model as |library|}}
+    <div class="col-md-4">
+      <div class="panel panel-default library-item">
+        <div class="panel-heading">
+          <h3 class="panel-title">{{library.name}}</h3>
+        </div>
+        <div class="panel-body">
+          <p>Address: {{library.address}}</p>
+          <p>Phone: {{library.phone}}</p>
+        </div>
+        <div class="panel-footer text-right">
+          {{#link-to 'libraries.edit' library.id class='btn btn-success btn-xs'}}Edit{{/link-to}}
+          <button class="btn btn-danger btn-xs" {{action 'deleteLibrary' library}}>Delete</button>
+        </div>
+      </div>
+    </div>
+  {{/each}}
+</div>
+```
+
+```
+# app/styles/app.scss
+@import 'bootstrap';
+
+body {
+  padding-top: 20px;
+}
+
+html {
+  overflow-y: scroll;
+}
+
+.library-item {
+  min-height: 150px;
+}
+```
+
+If you try to launch the app now, you’ll get an error message, because
+we haven’t implemented the `libraries.edit` route or the `deleteLibrary`
+action. Let’s implement these.
+
+**Duplicate some code, create edit.js and edit.hbs**
+
+Manually add the new `edit` route to `router.js`. We’ll set up a unique
+`path:` in the second parameter of `this.route()`. Because there is a
+`:` sign before the `library_id`, that part of the url will be copied as
+a variable, available as a param in our routes. For example, if the url
+is `http://api.dev.local:3000/libraries/1234/edit`, then `1234` will be
+passed as a param to the route so we can use it to fetch that specific
+model.
+
+```
+// app/router.js
+import Ember from 'ember';
+import config from './config/environment';
+
+const Router = Ember.Router.extend({
+  location: config.locationType
+});
+
+Router.map(function() {
+  this.route('about');
+  this.route('contact');
+
+  this.route('admin', function() {
+    this.route('invitations');
+    this.route('contacts');
+  });
+
+  this.route('libraries', function() {
+    this.route('new');
+    this.route('edit', { path: '/:library_id/edit' });
+  });
+});
+
+export default Router;
+```
+
+After inserting this extra line in our router, it’s time to create our
+`app/routes/libraries/edit.js`. You can use Ember CLI or you can create
+it manually. The code should look like the following. I’ll explain more
+below.
+
+```
+// app/routes/libraries/edit.js
+import Ember from 'ember';
+
+export default Ember.Route.extend({
+  model(params) {
+    return this.store.findRecord('library', params.library_id);
+  },
+
+  actions: {
+    saveLibrary(library) {
+      library.save().then(() => this.transitionTo('libraries'));
+    },
+
+    willTransition(transition) {
+      let model = this.controller.get('model');
+
+      if (model.get('hasDirtyAttributes')) {
+        let confirmation = confirm("Your changes haven't saved yet.  Would you like to leave this form?");
+
+        if (confirmation) {
+          model.rollbackAttributes();
+        } else {
+          transition.abort();
+        }
+      }
+    }
+  }
+});
+```
+
+A lot of things happening here.
+
+First of all, in the `model` function, we have a `params` parameter.
+`params` will contain that `id` from the url. We can access it with
+`params.library_id`.
+The `this.store.findRecord('library', params.library_id);` line
+downloads the single record from the server with the given `id`. The
+`id` comes from the url.
+
+We added two actions as well. The first will save the changes and then
+redirect the user to the main `libraries` page.
+
+The second event-action will be called when we are trying to leave the
+page, because we were redirected in the `saveLibrary` action or the user
+clicked on a link on the website. In the first case, the changes are
+already saved, but in the second case, the user may have modified
+something in the form but not saved it. This is known as “dirty
+checking”. We can read the `model` from the controller, and use Ember
+Model’s `hasDirtyAttributes` computed property to check whether
+something was changed in the model. If so, we popup an ugly confirmation
+window. If the user would like to leave the page, we just rollback the
+changes with `model.rollbackAttributes()`. If the user would like to
+stay on the page, we abort the transition with `transition.abort()`.
+You can see that we use the `transition` variable, which is initiated as
+a param in the `willTransition` function. Ember.js automatically
+provides this for us.
+
+Our template is still missing. Let’s use our `new.hbs` and duplicate the
+code in `edit.hbs`, with a few changes. We will fix this problem later
+with reusable “components”, because code duplication is not elegant.
+
+```
+<h2>Edit Library</h2>
+
+<div class="form-horizontal">
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Name</label>
+    <div class="col-sm-10">
+      {{input type="text" value=model.name class="form-control" placeholder="The name of the Library"}}
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Address</label>
+    <div class="col-sm-10">
+      {{input type="text" value=model.address class="form-control" placeholder="The address of the Library"}}
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Phone</label>
+    <div class="col-sm-10">
+      {{input type="text" value=model.phone class="form-control" placeholder="The phone number of the Library"}}
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default" {{action 'saveLibrary' model}}>Save changes</button>
+    </div>
+  </div>
+</div>
+```
+
+If you launch your app, it should work; you are able to edit the
+information from a library. You can see the “dirty checking” if you
+modify the data in the form, and then click on a link somewhere (ex. a
+link on the menu) without saving the form data.
+
+**Add delete action**
+
+```
+// app/routes/libraries/index.js
+import Ember from 'ember';
+
+export default Ember.Route.extend({
+  model() {
+    return this.store.findAll('library');
+  },
+
+  actions: {
+    deleteLibrary(library) {
+      let confirmation = confirm('Are you sure?');
+
+      if (confirmation) {
+        library.destroyRecord();
+      }
+    }
+  }
+});
+```
+
+You can add delete buttons to the lists on your Admin pages, so you can
+delete invitations and contact messages. Another nice improvement would
+be to clean up `app/controllers/index.js` and add a `createRecord` in
+the model method of `app/routes/index.js`. It would be similar to the
+`libraries/new.js` route.
+
 ### Cleaning up our templates with components
 
 First of all, please read more about [Components][15] in the Ember.js
@@ -1175,6 +1397,93 @@ export default Ember.Component.extend({
 });
 ```
 
+
+
+
+
+**Create a tiny bootstrap `nav-link-to` component for `<li><a></a></li>`**
+
+Time to clean up our navigation template. We’ll create a nice component
+that properly manages bootstrap `navbar` links.
+
+```
+ember g component nav-link-to
+```
+
+Because we would like to just slightly modify the built-in `LinkComponent`,
+we should just `extend` that class. We can utilize the `tagName` property,
+which determines the main tag of a component.
+
+Update `app/components/nav-link-to.js`:
+
+```
+// app/components/nav-link-to.js
+import Ember from 'ember';
+
+export default Ember.LinkComponent.extend({
+  tagName: 'li'
+});
+```
+
+Note: don’t forget to change `Ember.Component.extend` to
+`Ember.LinkComponent.extend`. The corresponding `nav-link-to` template
+will be the following:
+
+```
+<!-- app/templates/components/nav-link-to.hbs -->
+<a href="">{{yield}}</a>
+```
+
+Now we are ready to use our component in our `navbar.hbs`.
+
+```
+<!-- app/templates/navbar.hbs -->
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      {{#link-to 'index' class="navbar-brand"}}Library App{{/link-to}}
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav">
+        {{#nav-link-to 'index'}}Home{{/nav-link-to}}
+        {{#nav-link-to 'libraries'}}Libraries{{/nav-link-to}}
+        {{#nav-link-to 'about'}}About{{/nav-link-to}}
+        {{#nav-link-to 'contact'}}Contact{{/nav-link-to}}
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            Admin<span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            {{#nav-link-to 'admin.invitations'}}Invitations{{/nav-link-to}}
+            {{#nav-link-to 'admin.contacts'}}Contacts{{/nav-link-to}}
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+```
+
+Sidenote: If you have to solve this problem in a real application, I
+published an [Ember Addon][16], which automatically adds this component
+to your project, it is more complex, please use that one. You can check
+the source code on [Ember Bootstrap Nav Link ][17] repository.
+
+### Creating some new models and setting up relations
+
+### Create a new Admin page ‘Seeder’ and retrieve multiple models in the same route.
+
+
 ### CRUD interface for Authors and Books, managing model relationship
 
 We are going to create two new pages: Authors and Books, where we list
@@ -1199,3 +1508,5 @@ Let’s create our two new pages.
 [13]: https://emberjs.com/api/ember-data/2.14.10/classes/DS.Adapter
 [14]: http://guides.emberjs.com/v2.15.0/routing/specifying-a-routes-model/
 [15]: https://guides.emberjs.com/v2.15.0/components/defining-a-component/
+[16]: https://www.emberobserver.com/addons/ember-bootstrap-nav-link
+[17]: https://github.com/zoltan-nz/ember-bootstrap-nav-link
