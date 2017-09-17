@@ -89,8 +89,7 @@ We will use bootstrap navigation bar to create a nice header section for
 our app.
 
 ```
-// app/templates/application.hbs
-
+<!-- app/templates/application.hbs -->
 <div class="container">
   {{partial 'navbar'}}
   {{outlet}}
@@ -99,8 +98,10 @@ our app.
 
 ```
 ember generate template navbar
+```
 
-// app/templates/navbar.hbs
+```
+<!-- app/templates/navbar.hbs -->
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -126,10 +127,19 @@ You can update your `app.scss` file to add some extra padding to the
 top.
 
 ```
+<!-- app/styles/app.scss -->
 @import "bootstrap";
 
 body {
   padding-top: 20px;
+}
+
+html {
+  overflow-y: scroll;
+}
+
+.library-item {
+  min-height: 150px;
 }
 ```
 
@@ -150,7 +160,7 @@ Open `app/templates/navbar.hbs` and add the following line to the `ul`
 section under the `Home` link:
 
 ```
-// app/templates/navbar.hbs
+<!-- app/templates/navbar.hbs -->
 
 <ul class="nav navbar-nav">
   {{#link-to 'index' tagName="li"}}<a href="">Home</a>{{/link-to}}
@@ -173,6 +183,7 @@ Add a static jumbotron, an input box and a button to
 `app/templates/index.hbs`:
 
 ```
+<!-- app/templates/index.hbs -->
 <div class="jumbotron text-center">
   <h1>Coming Soon</h1>
 
@@ -565,6 +576,49 @@ export default Ember.Controller.extend({
 });
 ```
 
+Templates:
+
+```
+<!-- app/templates/contact.hbs -->
+<h1>Contact Page</h1>
+
+<p class="well well-sm">If you have any question or feedback please leave a message with your email address.</p>
+
+<div class="row">
+  <div class="col-md-6">
+
+    {{#if responseMessage}}
+
+      <br/>
+      <div class="alert alert-success">
+        <h4>Thank you! Your message is sent.</h4>
+        <p>To: {{model.email}}</p>
+        <p>Message: {{model.message}}</p>
+        <p>Reference ID: {{model.id}}</p>
+      </div>
+
+    {{else}}
+
+      <div class="form-group has-feedback {{if model.isValidEmail 'has-success'}}">
+        <label>Your email address*:</label>
+        {{input type="email" class="form-control" placeholder="Your email address" value=model.email autofocus="autofocus"}}
+        {{#if model.isValidEmail}}<span class="glyphicon glyphicon-ok form-control-feedback"></span>{{/if}}
+      </div>
+
+      <div class="form-group has-feedback {{if model.isMessageEnoughLong 'has-success'}}">
+        <label>Your message*:</label>
+        {{textarea class="form-control" placeholder="Your message. (At least 5 characters.)" rows="5" value=model.message}}
+        {{#if model.isMessageEnoughLong}}<span class="glyphicon glyphicon-ok form-control-feedback"></span>{{/if}}
+      </div>
+
+      <button class="btn btn-success" {{action 'sendMessage' model}} disabled={{model.isNotValid}}>Send</button>
+
+    {{/if}}
+
+  </div>
+</div>
+```
+
 Open the app in the browser, and open the browser’s console.
 Try to save an invitation email address on the home page.
 You will see an error message in the console.
@@ -638,6 +692,7 @@ ember g route admin/invitations
 Add this new page to the `navbar.hbs` with a dropdown.
 
 ```
+<!-- app/templates/navbar.hbs -->
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -673,6 +728,7 @@ Add this new page to the `navbar.hbs` with a dropdown.
 Add a table to `app/templates/admin/invitations.hbs`:
 
 ```
+<!-- app/templates/admin/invitations.hbs -->
 <h1>Invitations</h1>
 
 <table class="table table-bordered table-striped">
@@ -1119,6 +1175,15 @@ export default Ember.Component.extend({
   }
 });
 ```
+
+### CRUD interface for Authors and Books, managing model relationship
+
+We are going to create two new pages: Authors and Books, where we list
+our data and manage them. We implement create, edit and delete
+functionality, search and pagination also. You can learn here, how could
+you manage relations between models.
+
+Let’s create our two new pages.
 
 [1]: http://www.ember-cli.com
 [2]: http://localhost:4200
