@@ -161,7 +161,6 @@ section under the `Home` link:
 
 ```
 <!-- app/templates/navbar.hbs -->
-
 <ul class="nav navbar-nav">
   {{#link-to 'index' tagName="li"}}<a href="">Home</a>{{/link-to}}
   {{#link-to 'about' tagName="li"}}<a href="">About</a>{{/link-to}}
@@ -479,7 +478,7 @@ We use the `{{#if}}{{/if}}` handlebar helper block to show or hide the
 alert message. Handlebar conditionals are really powerful. You can use
 `{{else}}` as well.
 
-[More about conditionals in templates]:[5]
+[More about conditionals in templates][5]
 
 **Contact page**
 
