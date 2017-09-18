@@ -4,8 +4,6 @@ config :yoember, YoemberWeb.Endpoint,
   http: [port: System.get_env("TEST_PORT")],
   server: false
 
-config :logger, level: :warn
-
 config :yoember, :ecto_adapter, Sqlite.Ecto2
 
 config :yoember, Yoember.Repo,
@@ -14,3 +12,5 @@ config :yoember, Yoember.Repo,
   pool: Ecto.Adapters.SQL.Sandbox,
   size: 1,
   max_overflow: 0
+
+config :logger, level: :warn

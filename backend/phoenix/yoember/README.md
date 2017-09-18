@@ -71,6 +71,20 @@ config :yoember, Yoember.Repo,
 Edit the `Yoember.Repo` module in `lib/yoember/repo.ex` to use the
 `sqlite_ecto2` adapter:
 
+```
+defmodule Yoember.Repo do
+  use Ecto.Repo, otp_app: :yoember, adapter: Application.get_env(:yoember, :ecto_adapter)
+
+  @doc """
+  Dynamically loads the repository url from the
+  DATABASE_URL environment variable.
+  """
+  def init(_, opts) do
+    {:ok, Keyword.put(opts, :url, System.get_env("DATABASE_URL"))}
+  end
+end
+```
+
 > Environment Variable Definitions
 
 ```
@@ -78,12 +92,9 @@ Edit the `Yoember.Repo` module in `lib/yoember/repo.ex` to use the
 touch .env
 
 # file .env:
-
 export DB_DEV="yoember.sqlite3"
 export DB_PROD="yoember.sqlite3"
 export DB_TEST="test/yoember.sqlite3"
-
-source .env
 ```
 
 > Start Up App in development and test an enviroments
@@ -105,13 +116,85 @@ mix run priv/repo/seeds.exs
 mix test
 ```
 
+> Creating the models
+
+```
+mix phx.gen.json Invitations Invitation invitations email:string
+mix phx.gen.json Libraries Library libraries name:string address:string phone:string
+```
+edit router `lib/yoember_web/router.ex`:
+
+```
+defmodule YoemberWeb.Router do
+  use YoemberWeb, :router
+
+  pipeline :api do
+    plug :accepts, ["json"]
+  end
+
+  scope "/", YoemberWeb do
+    pipe_through :api
+
+    get "/", LibraryController, :index
+
+    resources "/invitations", InvitationController, except: [:new, :edit]
+    resources "/libraries", LibraryController, except: [:new, :edit]
+  end
+end
+```
+
+check out routers: `mix phx.routes`:
+
+```
+   library_path  GET     /                 YoemberWeb.LibraryController :index
+invitation_path  GET     /invitations      YoemberWeb.InvitationController :index
+invitation_path  GET     /invitations/:id  YoemberWeb.InvitationController :show
+invitation_path  POST    /invitations      YoemberWeb.InvitationController :create
+invitation_path  PATCH   /invitations/:id  YoemberWeb.InvitationController :update
+                 PUT     /invitations/:id  YoemberWeb.InvitationController :update
+invitation_path  DELETE  /invitations/:id  YoemberWeb.InvitationController :delete
+   library_path  GET     /libraries        YoemberWeb.LibraryController :index
+   library_path  GET     /libraries/:id    YoemberWeb.LibraryController :show
+   library_path  POST    /libraries        YoemberWeb.LibraryController :create
+   library_path  PATCH   /libraries/:id    YoemberWeb.LibraryController :update
+                 PUT     /libraries/:id    YoemberWeb.LibraryController :update
+   library_path  DELETE  /libraries/:id    YoemberWeb.LibraryController :delete
+
+```
+
+Run migrations: `mix ecto.migrate`
+
+Create fakers data `priv/repo/seeds.exs`:
+
+```
+alias Yoember.Repo
+alias Yoember.Invitations.Invitation
+alias Yoember.Libraries.Library
+alias Faker, as: Faker
+
+for _ <- 1..9 do
+  Repo.insert!(%Invitation{
+    email: Faker.Internet.free_email
+  })
+  Repo.insert!(%Library{
+    name: Faker.Name.name,
+    address: Enum.join([Faker.Address.street_address(true), " ", Faker.Address.city]),
+    phone: Faker.Phone.EnUs.extension(10)
+  })
+end
+```
+
+Run faker seeds: `mix run priv/repo/seeds.exs`
+
+Check out resources: `mix phx.server`
+
 > To start your Phoenix app:
 
   * Install dependencies with `mix deps.get`
   * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
-  * Start Phoenix endpoint with `mix phoenix.server`
+  * Start Phoenix endpoint with `mix phx.server`
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+Now you can visit [`localhost:4000`](http://localhost:3000) from your browser.
 
 Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
 
