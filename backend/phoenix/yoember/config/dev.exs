@@ -1,18 +1,20 @@
 use Mix.Config
 
 config :yoember, YoemberWeb.Endpoint,
-  http: [port: 4000],
+  http: [ip: {127,0,0,1}, port: System.get_env("PORT") || 3000],
+  url: [host: System.get_env("HOSTNAME"), port: {:system, "PORT"}],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  watchers: []
+  watchers: [],
+  server: true
+
+config :yoember, Yoember.Repo,
+  adapter: Sqlite.Ecto2,
+  database: System.get_env("DB_DEV"),
+  size: 1,
+  max_overflow: 0
 
 config :logger, :console, format: "[$level] $message\n"
 
 config :phoenix, :stacktrace_depth, 20
-
-config :yoember, Yoember.Repo,
-  adapter: Sqlite.Ecto2,
-  database: "yoember.sqlite3",
-  size: 1,
-  max_overflow: 0

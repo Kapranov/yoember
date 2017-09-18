@@ -89,13 +89,13 @@ source .env
 > Start Up App in development and test an enviroments
 
 ```
+source .env
+
 mix deps.get
 mix deps.clean --all
 mix deps.get
 mix deps.update --all
 mix deps.get
-
-source .env
 
 mix ecto.create
 mix ecto.migrate
