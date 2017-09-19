@@ -7,7 +7,7 @@ config :yoember, YoemberWeb.Endpoint,
   url: [host: System.get_env("HOSTNAME"), port: {:system, "PORT"}],
   http: [port: System.get_env("PORT") || 3000],
   secret_key_base: System.get_env("SECRET_KEY_BASE"),
-  render_errors: [view: YoemberWeb.ErrorView, accepts: ~w(json)],
+  render_errors: [view: YoemberWeb.ErrorView, accepts: ~w(json json-api)],
   pubsub: [name: Yoember.PubSub, adapter: Phoenix.PubSub.PG2]
 
 config :yoember, Yoember.Repo,

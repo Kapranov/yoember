@@ -1,42 +1,54 @@
 defmodule YoemberWeb.LibraryController do
   use YoemberWeb, :controller
 
-  alias Yoember.Libraries
+  alias Yoember.Repo
   alias Yoember.Libraries.Library
 
   action_fallback YoemberWeb.FallbackController
 
   def index(conn, _params) do
-    libraries = Libraries.list_libraries()
+    libraries = Repo.all(Library)
     render(conn, "index.json-api", data: libraries)
   end
 
-  def create(conn, %{"library" => library_params}) do
-    with {:ok, %Library{} = library} <- Libraries.create_library(library_params) do
-      conn
-      |> put_status(:created)
-      |> put_resp_header("location", library_path(conn, :show, library))
-      |> render("show.json-api", data: library)
+  def create(conn, %{"data" => data}) do
+    attrs = JaSerializer.Params.to_attributes(data)
+    changeset = Library.changeset(%Library{}, attrs)
+    case Repo.insert(changeset) do
+      {:ok, library} ->
+        conn
+        |> put_status(201)
+        |> render("show.json-api", data: library)
+      {:error, changeset} ->
+        conn
+        |> put_status(422)
+        |> render(:errors, data: changeset)
     end
   end
 
   def show(conn, %{"id" => id}) do
-    library = Libraries.get_library!(id)
+    library = Repo.get!(Library, id)
     render(conn, "show.json-api", data: library)
   end
 
-  def update(conn, %{"id" => id, "library" => library_params}) do
-    library = Libraries.get_library!(id)
+  def update(conn, %{"id" => id, "data" => data}) do
+    attrs = JaSerializer.Params.to_attributes(data)
+    library = Repo.get!(Library, id)
+    changeset = Library.changeset(library, attrs)
 
-    with {:ok, %Library{} = library} <- Libraries.update_library(library, library_params) do
-      render(conn, "show.json-api", data: library)
+    case Repo.update(changeset) do
+      {:ok, library} ->
+        render(conn, "show.json-api", data: library)
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(:errors, data: changeset)
     end
   end
 
   def delete(conn, %{"id" => id}) do
-    library = Libraries.get_library!(id)
-    with {:ok, %Library{}} <- Libraries.delete_library(library) do
-      send_resp(conn, :no_content, "")
-    end
+     library = Repo.get!(Library, id)
+     Repo.delete!(library)
+     send_resp(conn, :no_content, "")
   end
 end
