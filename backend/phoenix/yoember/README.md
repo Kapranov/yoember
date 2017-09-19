@@ -434,12 +434,10 @@ backend app.
 We’ll have to add `cors_plug` to our list of dependencies in `mix.exs`
 which will look like this, we had been done early:
 
-```
 add to `lib/yoember_web/endpoint.ex`:
 
 ```
   plug CORSPlug
-
   plug YoemberWeb.Router
 ```
 
