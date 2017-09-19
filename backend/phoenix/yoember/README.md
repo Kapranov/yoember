@@ -520,7 +520,7 @@ them: `mix phx.server` vs `ember server`.
 
   * Install dependencies with `mix deps.get`
   * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
-  * Start Phoenix endpoint with `mix phx.server`
+  * Start Phoenix endpoint with `mix phx.server` or interactive `iex -S mix`
 
 Now you can visit [`localhost:4000`](http://localhost:3000) from your browser.
 
