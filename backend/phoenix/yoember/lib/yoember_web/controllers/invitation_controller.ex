@@ -8,7 +8,7 @@ defmodule YoemberWeb.InvitationController do
 
   def index(conn, _params) do
     invitations = Invitations.list_invitations()
-    render(conn, "index.json", invitations: invitations)
+    render(conn, "index.json-api", data: invitations)
   end
 
   def create(conn, %{"invitation" => invitation_params}) do
@@ -16,20 +16,20 @@ defmodule YoemberWeb.InvitationController do
       conn
       |> put_status(:created)
       |> put_resp_header("location", invitation_path(conn, :show, invitation))
-      |> render("show.json", invitation: invitation)
+      |> render("show.json-api", data: invitation)
     end
   end
 
   def show(conn, %{"id" => id}) do
     invitation = Invitations.get_invitation!(id)
-    render(conn, "show.json", invitation: invitation)
+    render(conn, "show.json-api", data: invitation)
   end
 
   def update(conn, %{"id" => id, "invitation" => invitation_params}) do
     invitation = Invitations.get_invitation!(id)
 
     with {:ok, %Invitation{} = invitation} <- Invitations.update_invitation(invitation, invitation_params) do
-      render(conn, "show.json", invitation: invitation)
+      render(conn, "show.json-api", data: invitation)
     end
   end
 

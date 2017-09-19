@@ -1,16 +1,6 @@
 defmodule YoemberWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :yoember
 
-  socket "/socket", YoemberWeb.UserSocket
-
-  plug Plug.Static,
-    at: "/", from: :yoember, gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt)
-
-  if code_reloading? do
-    plug Phoenix.CodeReloader
-  end
-
   plug Plug.RequestId
   plug Plug.Logger
 
@@ -26,6 +16,8 @@ defmodule YoemberWeb.Endpoint do
     store: :cookie,
     key: "_yoember_key",
     signing_salt: "5PI7nd6V"
+
+  plug CORSPlug
 
   plug YoemberWeb.Router
 

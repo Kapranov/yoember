@@ -1,6 +1,9 @@
 defmodule YoemberWeb.LibraryView do
   use YoemberWeb, :view
+  use JaSerializer.PhoenixView
   alias YoemberWeb.LibraryView
+
+  attributes [:id, :name, :address, :phone]
 
   def render("index.json", %{libraries: libraries}) do
     %{data: render_many(libraries, LibraryView, "library.json")}

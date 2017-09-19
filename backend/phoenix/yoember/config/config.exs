@@ -14,6 +14,18 @@ config :yoember, Yoember.Repo,
   adapter: Sqlite.Ecto2,
   database: System.get_env("DB_DEV")
 
+config :phoenix, :format_encoders,
+  "json-api": Poison
+
+config :mime, :types, %{
+  "application/vnd.api+json" => ["json-api"]
+}
+
+config :cors_plug,
+  origin: System.get_env("CORS_HOST"),
+  max_age: 86400,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"]
+
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]

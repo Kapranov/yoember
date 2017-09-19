@@ -31,8 +31,13 @@ defmodule Yoember.Mixfile do
       {:phoenix_ecto, "~> 3.2"},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
+      {:plug, "~> 1.4"},
       {:sqlite_ecto2, "~> 2.2", only: [:dev, :test]},
-      {:faker, "~> 0.9", only: [:dev, :test]}
+      {:faker, "~> 0.9", only: [:dev, :test]},
+      {:mime, "~> 1.1"},
+      {:poison, "~> 3.1"},
+      {:ja_serializer, "~> 0.12"},
+      {:cors_plug, "~> 1.4"}
     ]
   end
 

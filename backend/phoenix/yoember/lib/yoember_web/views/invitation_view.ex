@@ -1,6 +1,9 @@
 defmodule YoemberWeb.InvitationView do
   use YoemberWeb, :view
+  use JaSerializer.PhoenixView
   alias YoemberWeb.InvitationView
+
+  attributes [:id, :email]
 
   def render("index.json", %{invitations: invitations}) do
     %{data: render_many(invitations, InvitationView, "invitation.json")}

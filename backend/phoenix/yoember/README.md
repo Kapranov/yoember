@@ -188,6 +188,307 @@ Run faker seeds: `mix run priv/repo/seeds.exs`
 
 Check out resources: `mix phx.server`
 
+> Setting JSONAPI format and Serialization
+
+I’ll be following [jsonapi][3] format for building out the APIs. It’s
+really scalable and obviously, you should be following some standards
+while designing your APIs.
+
+Poison is a new JSON library for Elixir focusing on wicked-fast speed
+without sacrificing simplicity, completeness, or correctness and takes
+several approaches to be the fastest JSON library for Elixir. It will
+add `poison` to `mix.exs`:
+
+```
+defp deps do
+  [
+    {:plug, "~> 1.4"},
+    {:mime, "~> 1.1"},
+    {:poison, "~> 3.1"},
+    {:ja_serializer, "~> 0.12"},
+    {:cors_plug, "~> 1.4"}
+  ]
+end
+```
+
+We’ll need to make some minor changes so that our app follows this spec.
+Open `config/config.exs` and add the following code:
+
+```
+config :phoenix, :format_encoders,
+  "json-api": Poison
+
+config :mime, :types, %{
+  "application/vnd.api+json" => ["json-api"]
+}
+```
+
+By default, jsonapi specs require the mime type to be:
+
+```
+application/vnd.api+json
+```
+We'll add `JaSerializer` to `lib/yoember_web/router.ex`:
+
+```
+defmodule YoemberWeb.Router do
+  use YoemberWeb, :router
+
+  pipeline :api do
+    plug :accepts, ["json-api"]
+    plug JaSerializer.ContentTypeNegotiation
+    plug JaSerializer.Deserializer
+  end
+
+  scope "/", YoemberWeb do
+    pipe_through :api
+
+    get "/", LibraryController, :index
+
+    resources "/invitations", InvitationController, except: [:new, :edit]
+    resources "/libraries", LibraryController, except: [:new, :edit]
+  end
+end
+```
+
+and add to `lib/yoember_web/views/invitation_view.ex`:
+
+```
+defmodule YoemberWeb.InvitationView do
+  use YoemberWeb, :view
+  use JaSerializer.PhoenixView
+  alias YoemberWeb.InvitationView
+
+  attributes [:id, :email]
+
+  def render("index.json", %{invitations: invitations}) do
+    %{data: render_many(invitations, InvitationView, "invitation.json")}
+  end
+
+  def render("show.json", %{invitation: invitation}) do
+    %{data: render_one(invitation, InvitationView, "invitation.json")}
+  end
+
+  def render("invitation.json", %{invitation: invitation}) do
+    %{id: invitation.id,
+      email: invitation.email}
+  end
+end
+```
+
+and to `lib/yoember_web/views/library_controller.ex`:
+
+```
+defmodule YoemberWeb.LibraryView do
+  use YoemberWeb, :view
+  use JaSerializer.PhoenixView
+  alias YoemberWeb.LibraryView
+
+  attributes [:id, :name, :address, :phone]
+
+  def render("index.json", %{libraries: libraries}) do
+    %{data: render_many(libraries, LibraryView, "library.json")}
+  end
+
+  def render("show.json", %{library: library}) do
+    %{data: render_one(library, LibraryView, "library.json")}
+  end
+
+  def render("library.json", %{library: library}) do
+    %{id: library.id,
+      name: library.name,
+      address: library.address,
+      phone: library.phone}
+  end
+end
+```
+
+Update controller to 'lib/controllers/invitation_controller.ex':
+
+```
+defmodule YoemberWeb.InvitationController do
+  use YoemberWeb, :controller
+
+  alias Yoember.Invitations
+  alias Yoember.Invitations.Invitation
+
+  action_fallback YoemberWeb.FallbackController
+
+  def index(conn, _params) do
+    invitations = Invitations.list_invitations()
+    render(conn, "index.json-api", data: invitations)
+  end
+
+  def create(conn, %{"invitation" => invitation_params}) do
+    with {:ok, %Invitation{} = invitation} <- Invitations.create_invitation(invitation_params) do
+      conn
+      |> put_status(:created)
+      |> put_resp_header("location", invitation_path(conn, :show, invitation))
+      |> render("show.json-api", data: invitation)
+    end
+  end
+
+  def show(conn, %{"id" => id}) do
+    invitation = Invitations.get_invitation!(id)
+    render(conn, "show.json-api", data: invitation)
+  end
+
+  def update(conn, %{"id" => id, "invitation" => invitation_params}) do
+    invitation = Invitations.get_invitation!(id)
+
+    with {:ok, %Invitation{} = invitation} <- Invitations.update_invitation(invitation, invitation_params) do
+      render(conn, "show.json-api", data: invitation)
+    end
+  end
+
+  def delete(conn, %{"id" => id}) do
+    invitation = Invitations.get_invitation!(id)
+    with {:ok, %Invitation{}} <- Invitations.delete_invitation(invitation) do
+      send_resp(conn, :no_content, "")
+    end
+  end
+end
+```
+
+and `lib/controllers/library_controller.ex`:
+
+```
+defmodule YoemberWeb.LibraryController do
+  use YoemberWeb, :controller
+
+  alias Yoember.Libraries
+  alias Yoember.Libraries.Library
+
+  action_fallback YoemberWeb.FallbackController
+
+  def index(conn, _params) do
+    libraries = Libraries.list_libraries()
+    render(conn, "index.json-api", data: libraries)
+  end
+
+  def create(conn, %{"library" => library_params}) do
+    with {:ok, %Library{} = library} <- Libraries.create_library(library_params) do
+      conn
+      |> put_status(:created)
+      |> put_resp_header("location", library_path(conn, :show, library))
+      |> render("show.json-api", data: library)
+    end
+  end
+
+  def show(conn, %{"id" => id}) do
+    library = Libraries.get_library!(id)
+    render(conn, "show.json-api", data: library)
+  end
+
+  def update(conn, %{"id" => id, "library" => library_params}) do
+    library = Libraries.get_library!(id)
+
+    with {:ok, %Library{} = library} <- Libraries.update_library(library, library_params) do
+      render(conn, "show.json-api", data: library)
+    end
+  end
+
+  def delete(conn, %{"id" => id}) do
+    library = Libraries.get_library!(id)
+    with {:ok, %Library{}} <- Libraries.delete_library(library) do
+      send_resp(conn, :no_content, "")
+    end
+  end
+end
+```
+
+**Setting up CORS**
+
+Also, since our APIs will be consumed by a frontend app which will
+reside in some other domain, we’ll need to add CORS support for our
+backend app.
+
+We’ll have to add `cors_plug` to our list of dependencies in `mix.exs`
+which will look like this, we had been done early:
+
+```
+add to `lib/yoember_web/endpoint.ex`:
+
+```
+  plug CORSPlug
+
+  plug YoemberWeb.Router
+```
+
+And also you can put configuration into `config/config.exs`:
+
+```
+config :cors_plug,
+  origin: System.get_env("CORS_HOST"),
+  max_age: 86400,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"]
+```
+
+Update `.env`:
+
+```
+export PORT="3000"
+export CORS_HOST="api.dev.local:4200"
+export TEST_PORT="4000"
+export HOSTNAME="api.dev.local"
+export DB_DEV="yoember.sqlite3"
+export DB_PROD="yoember.sqlite3"
+export DB_TEST="test/yoember.sqlite3"
+export SECRET_KEY_BASE="op4XPX42oJ6AHp8zpPSFMhmoqmsbjg799/5JM8oU2jeGiwXn/JQsHC/prYuuVJuG",
+export SECRET_KEY_BASE_PROD="jmakITT6898HnS2/cwS0JKErDy945gXMQmjTMcAteVkSQcID3WBUkrMfHk1XLqOT"
+```
+
+Clean up `lib/yoember_web/endpoint.ex`:
+
+```
+defmodule YoemberWeb.Endpoint do
+  use Phoenix.Endpoint, otp_app: :yoember
+
+  plug Plug.RequestId
+  plug Plug.Logger
+
+  plug Plug.Parsers,
+    parsers: [:urlencoded, :multipart, :json],
+    pass: ["*/*"],
+    json_decoder: Poison
+
+  plug Plug.MethodOverride
+  plug Plug.Head
+
+  plug Plug.Session,
+    store: :cookie,
+    key: "_yoember_key",
+    signing_salt: "5PI7nd6V"
+
+  plug CORSPlug
+
+  plug YoemberWeb.Router
+
+  @doc """
+  Callback invoked for dynamically configuring the endpoint.
+
+  It receives the endpoint configuration and checks if
+  configuration should be loaded from the system environment.
+  """
+  def init(_key, config) do
+    if config[:load_from_system_env] do
+      port = System.get_env("PORT") || raise "expected the PORT environment variable to be set"
+      {:ok, Keyword.put(config, :http, [:inet6, port: port])}
+    else
+      {:ok, config}
+    end
+  end
+end
+```
+
+Remove sockets `rm -r lib/yoember_web/channels/`.
+
+For now, the initial step to bootstrap our app is complete.
+
+Start servers backend(Phoenix), front-end(Ember) for check out all of
+them: `mix phx.server` vs `ember server`.
+
+
 > To start your Phoenix app:
 
   * Install dependencies with `mix deps.get`
@@ -210,3 +511,5 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
 
 [1]: https://hex.pm/
 [2]: https://hexdocs.pm/phoenix/Phoenix.html
+[3]: http://jsonapi.org/
+[4]: https://github.com/vt-elixir/ja_serializer
