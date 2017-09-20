@@ -3,7 +3,6 @@ defmodule Yoember.Libraries.Library do
   import Ecto.Changeset
   alias Yoember.Libraries.Library
 
-
   schema "libraries" do
     field :address, :string
     field :name, :string

@@ -31,6 +31,7 @@ defmodule Yoember.Mixfile do
       {:phoenix_ecto, "~> 3.2"},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
+      {:timex, "~> 3.1"},
       {:plug, "~> 1.4"},
       {:sqlite_ecto2, "~> 2.2", only: [:dev, :test]},
       {:faker, "~> 0.9", only: [:dev, :test]},

@@ -1,5 +1,6 @@
 defmodule YoemberWeb.Router do
   use YoemberWeb, :router
+  use JaSerializer.PhoenixView
 
   pipeline :api do
     plug :accepts, ["json-api"]

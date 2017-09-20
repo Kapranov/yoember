@@ -40,32 +40,107 @@ and we have added faker package too.
 Edit the `config/config.exs`:
 
 ```
-config :rephink, Yoember.Repo,
+use Mix.Config
+
+config :yoember,
+  ecto_repos: [Yoember.Repo]
+
+config :yoember, YoemberWeb.Endpoint,
+  url: [host: System.get_env("HOSTNAME"), port: {:system, "PORT"}],
+  http: [port: System.get_env("PORT") || 3000],
+  secret_key_base: System.get_env("SECRET_KEY_BASE"),
+  render_errors: [view: YoemberWeb.ErrorView, accepts: ~w(json json-api)],
+  pubsub: [name: Yoember.PubSub, adapter: Phoenix.PubSub.PG2]
+
+config :yoember, Yoember.Repo,
   adapter: Sqlite.Ecto2,
-  database: "yoember.sqlite3"
+  database: System.get_env("DB_DEV")
+
+config :phoenix, :format_encoders,
+  "json-api": Poison
+
+config :mime, :types, %{
+  "application/vnd.api+json" => ["json-api"]
+}
+
+config :cors_plug,
+  origin: System.get_env("CORS_HOST"),
+  max_age: 86400,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"]
+
+config :logger, :console,
+  format: "$time $metadata[$level] $message\n",
+  metadata: [:request_id]
+
+import_config "#{Mix.env}.exs"
 ```
 
 Edit the `config/dev.exs`:
 
 ```
+use Mix.Config
+
+config :yoember, YoemberWeb.Endpoint,
+  http: [ip: {127,0,0,1}, port: System.get_env("PORT") || 3000],
+  url: [host: System.get_env("HOSTNAME"), port: {:system, "PORT"}],
+  debug_errors: false,
+  catch_errors: true,
+  code_reloader: true,
+  check_origin: false,
+  watchers: [],
+  server: true,
+  env: System.get_env("ENV_DEV")
+
 config :yoember, Yoember.Repo,
   adapter: Sqlite.Ecto2,
-  database: "yoember.sqlite3",
+  database: System.get_env("DB_DEV"),
   size: 1,
   max_overflow: 0
+
+config :logger, :console, format: "[$level] $message\n"
+
+config :phoenix, :stacktrace_depth, 20
 ```
 
 Edit the `config/test.exs`:
 
 ```
+use Mix.Config
+
+config :yoember, YoemberWeb.Endpoint,
+  http: [port: System.get_env("TEST_PORT")],
+  server: false,
+  env: System.get_env("ENV_TEST")
+
 config :yoember, :ecto_adapter, Sqlite.Ecto2
 
 config :yoember, Yoember.Repo,
   adapter: Application.get_env(:yoember, :ecto_adapter),
-  database: "test/yoember.sqlite3",
+  database: System.get_env("DB_TEST"),
   pool: Ecto.Adapters.SQL.Sandbox,
   size: 1,
   max_overflow: 0
+
+config :logger, level: :warn
+```
+
+Edit the `config/prod.exs`:
+
+```
+use Mix.Config
+
+config :yoember, YoemberWeb.Endpoint,
+  load_from_system_env: true,
+  http: [port: {:system, "PORT"}],
+  url: [host: System.get_env("HOSTNAME"), port: {:system, "PORT"}],
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  server: true,
+  root: ".",
+  env: System.get_env("ENV_PROD")
+
+config :logger, level: :info
+
+import_config "prod.secret.exs"
 ```
 
 Edit the `Yoember.Repo` module in `lib/yoember/repo.ex` to use the
@@ -92,9 +167,18 @@ end
 touch .env
 
 # file .env:
+export PORT="3000"
+export CORS_HOST="api.dev.local:4200"
+export TEST_PORT="4000"
+export HOSTNAME="api.dev.local"
 export DB_DEV="yoember.sqlite3"
 export DB_PROD="yoember.sqlite3"
 export DB_TEST="test/yoember.sqlite3"
+export ENV_DEV="Development"
+export ENV_TEST="Test"
+export ENV_PROD="Production"
+export SECRET_KEY_BASE="op4XPX42oJ6AHp8zpPSFMhmoqmsbjg799/5JM8oU2jeGiwXn/JQsHC/prYuuVJuG",
+export SECRET_KEY_BASE_PROD="jmakITT6898HnS2/cwS0JKErDy945gXMQmjTMcAteVkSQcID3WBUkrMfHk1XLqOT"
 ```
 
 > Start Up App in development and test an enviroments
@@ -202,6 +286,7 @@ add `poison` to `mix.exs`:
 ```
 defp deps do
   [
+    {:timex, "~> 3.1"},
     {:plug, "~> 1.4"},
     {:mime, "~> 1.1"},
     {:poison, "~> 3.1"},
@@ -449,19 +534,51 @@ config :cors_plug,
   max_age: 86400,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"]
 ```
-
-Update `.env`:
+Update errors view `lib/yoember_web/views/error_view.ex`:
 
 ```
-export PORT="3000"
-export CORS_HOST="api.dev.local:4200"
-export TEST_PORT="4000"
-export HOSTNAME="api.dev.local"
-export DB_DEV="yoember.sqlite3"
-export DB_PROD="yoember.sqlite3"
-export DB_TEST="test/yoember.sqlite3"
-export SECRET_KEY_BASE="op4XPX42oJ6AHp8zpPSFMhmoqmsbjg799/5JM8oU2jeGiwXn/JQsHC/prYuuVJuG",
-export SECRET_KEY_BASE_PROD="jmakITT6898HnS2/cwS0JKErDy945gXMQmjTMcAteVkSQcID3WBUkrMfHk1XLqOT"
+defmodule YoemberWeb.ErrorView do
+  use YoemberWeb, :view
+
+  def render("401.json", _assigns) do
+    %{
+      errors: %{message: "Unauthorized"},
+      meta: %{licence: "CC-0", authors: "LugaTeX Inc."}
+    }
+  end
+
+  def render("403.json", _assigns) do
+    %{
+      errors: %{message: "Forbidden"},
+      meta: %{licence: "CC-0", authors: "LugaTeX Inc."}
+    }
+  end
+
+  def render("404.json", _assigns) do
+    %{
+      errors: %{message: "Page not found"},
+      meta: %{licence: "CC-0", authors: "LugaTeX Inc."}
+    }
+  end
+
+  def render("422.json", _assigns) do
+    %{
+      errors: %{message: "Unprocessable entity"},
+      meta: %{licence: "CC-0", authors: "LugaTeX Inc."}
+    }
+  end
+
+  def render("500.json", _assigns) do
+    %{
+      errors: %{message: "Server Error"},
+      meta: %{licence: "CC-0", authors: "LugaTeX Inc."}
+    }
+  end
+
+  def template_not_found(_template, assigns) do
+    render "500.json", assigns
+  end
+end
 ```
 
 Clean up `lib/yoember_web/endpoint.ex`:
@@ -516,6 +633,19 @@ them: `mix phx.server` vs `ember server`.
 
 > Testing
 
+> Pagination
+
+> iex console
+
+```
+import Ecto.Query
+
+query = from w in Yoember.Libraries.Library, where: w.id == 1
+Yoember.Repo.all(query)
+
+Yoember.Repo.all(Yoember.Libraries.Library |> select([library], library.name))
+```
+
 > To start your Phoenix app:
 
   * Install dependencies with `mix deps.get`
@@ -540,3 +670,12 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
 [2]: https://hexdocs.pm/phoenix/Phoenix.html
 [3]: http://jsonapi.org/
 [4]: https://github.com/vt-elixir/ja_serializer
+[5]: https://github.com/drewolson/scrivener
+[5]: https://github.com/phoenixframework/phoenix_pubsub_redis
+[6]: https://github.com/igrs/phoenix_session_redis
+[7]: https://github.com/aposto/plug_session_redis
+[8]: https://github.com/artemeff/exredis
+[9]: https://github.com/aposto/plug_session_redis
+[10]: https://github.com/thoughtbot/redbird
+[11]: https://github.com/ianwalter/bouncer
+[12]: https://github.com/whatyouhide/redix

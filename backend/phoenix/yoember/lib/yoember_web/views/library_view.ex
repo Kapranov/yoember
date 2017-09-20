@@ -1,6 +1,7 @@
 defmodule YoemberWeb.LibraryView do
   use YoemberWeb, :view
   use JaSerializer.PhoenixView
+
   alias YoemberWeb.LibraryView
 
   attributes [:id, :name, :address, :phone]

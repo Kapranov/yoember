@@ -2,7 +2,8 @@ use Mix.Config
 
 config :yoember, YoemberWeb.Endpoint,
   http: [port: System.get_env("TEST_PORT")],
-  server: false
+  server: false,
+  env: System.get_env("ENV_TEST")
 
 config :yoember, :ecto_adapter, Sqlite.Ecto2
 

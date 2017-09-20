@@ -6,7 +6,8 @@ config :yoember, YoemberWeb.Endpoint,
   url: [host: System.get_env("HOSTNAME"), port: {:system, "PORT"}],
   cache_static_manifest: "priv/static/cache_manifest.json",
   server: true,
-  root: "."
+  root: ".",
+  env: System.get_env("ENV_PROD")
 
 config :logger, level: :info
 
